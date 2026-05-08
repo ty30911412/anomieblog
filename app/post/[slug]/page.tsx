@@ -21,7 +21,8 @@ async function getPost(slug: string): Promise<BlogPost | null> {
   if (!adminDb) return null
   const docSnap = await adminDb.collection('posts').doc(slug).get()
   if (!docSnap.exists) return null
-  return { id: docSnap.id, slug: docSnap.id, ...(docSnap.data() as Omit<BlogPost, 'id'>) }
+  const data = docSnap.data() as Omit<BlogPost, 'id' | 'slug'>
+  return { id: docSnap.id, slug: docSnap.id, ...data }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
