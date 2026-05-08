@@ -1,0 +1,13 @@
+node_modules
+.next
+.env.local
+.env*.local
+*.pem
+*.json.key
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

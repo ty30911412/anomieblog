@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #fdfbf7;
+    color: #36312d;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #fde68a;
+    color: #78350f;
+  }
+}
+
+@layer components {
+  /* prose 自訂樣式 */
+  .prose-anomie a {
+    @apply text-amber-700 font-bold hover:text-amber-900 hover:underline transition-colors;
+  }
+
+  .prose-anomie blockquote {
+    @apply border-l-4 border-amber-500 pl-4 py-1 bg-amber-50/50 italic text-ink-700 rounded-r-lg;
+  }
+
+  .prose-anomie code:not(pre code) {
+    @apply bg-ink-100 text-amber-800 px-1.5 py-0.5 rounded text-sm font-mono font-bold;
+  }
+
+  .prose-anomie img {
+    @apply rounded-lg shadow-sm border border-ink-100 my-6 max-h-[500px] object-cover mx-auto;
+  }
+}
+
+/* 平滑淡入 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
