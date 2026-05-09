@@ -39,7 +39,7 @@ export default function WinProbabilityBar({
         {!compact && (
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-[10px] font-bold text-ink-400 uppercase tracking-widest">
-              預測勝率
+              模型預測勝率
             </span>
             <span className="text-[10px] text-ink-300 font-mono">
               民調權重 {Math.round(pollWeight * 100)}%
@@ -106,9 +106,9 @@ export default function WinProbabilityBar({
               </div>
 
               <div className="space-y-1">
-                {/* 民調均值 */}
+                {/* 加權平均支持率 */}
                 <div className="flex justify-between items-baseline">
-                  <span className="text-[10px] text-ink-400">民調均值</span>
+                  <span className="text-[10px] text-ink-400">加權平均支持率</span>
                   <div className="text-right">
                     <span className="font-mono font-bold text-ink-700 text-sm">{avgPct[c.name] ?? 0}%</span>
                     {!compact && u !== undefined && (
@@ -140,13 +140,13 @@ export default function WinProbabilityBar({
 
                 {!compact && (
                   <div className="flex justify-between items-baseline">
-                    <span className="text-[10px] text-ink-400">純民調勝率</span>
+                    <span className="text-[10px] text-ink-400">民調相對勝率</span>
                     <span className="font-mono text-ink-500 text-xs">{winProb[c.name] ?? 0}%</span>
                   </div>
                 )}
 
                 <div className="flex justify-between items-baseline">
-                  <span className="text-[10px] text-ink-400">預測勝率</span>
+                  <span className="text-[10px] text-ink-400">模型預測勝率</span>
                   <span className="font-mono font-bold text-sm" style={{ color: c.color }}>
                     {predictedProb[c.name] ?? 0}%
                   </span>
@@ -154,7 +154,7 @@ export default function WinProbabilityBar({
 
                 {!compact && ci && (
                   <div className="flex justify-between items-baseline">
-                    <span className="text-[10px] text-ink-300">95% CI</span>
+                    <span className="text-[10px] text-ink-300">95% 信賴區間</span>
                     <span className="font-mono text-[10px] text-ink-300">{ci[0]}–{ci[1]}%</span>
                   </div>
                 )}

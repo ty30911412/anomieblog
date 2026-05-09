@@ -21,8 +21,8 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
       {/* 未表態提示 */}
       <div className="flex items-center justify-between text-[11px]">
         <span className="text-ink-400">
-          民調表態率：<span className="font-mono font-bold text-ink-600">{declaredTotal}%</span>
-          <span className="text-ink-300 ml-2">（未表態 {undecided}% 按比例 60% 分配、40% 歸棄票/小黨）</span>
+          民調明確表態比例：<span className="font-mono font-bold text-ink-600">{declaredTotal}%</span>
+          <span className="text-ink-300 ml-2">（未表態 {undecided}% 中，60% 按比例分配給各候選人、40% 歸棄票或小黨）</span>
         </span>
       </div>
 
@@ -92,11 +92,11 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
 
               {/* 次要數字：民調調整前後 */}
               <div className="flex gap-4 text-[10px] text-ink-400 font-mono pl-4">
-                <span>民調均值 {agg.avgPct[c.name] ?? 0}%</span>
+                <span>加權平均支持率 {agg.avgPct[c.name] ?? 0}%</span>
                 <span className="text-ink-300">→</span>
-                <span>含未表態分配 {pollAdj}%</span>
+                <span>分配未表態後 {pollAdj}%</span>
                 <span className="text-ink-300">→</span>
-                <span>混合先驗 <strong style={{ color: c.color }}>{proj}%</strong></span>
+                <span>混合歷史選民結構 <strong style={{ color: c.color }}>{proj}%</strong></span>
               </div>
             </div>
           )
@@ -105,9 +105,9 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
 
       {/* 說明 */}
       <div className="text-[10px] text-ink-300 border-t border-ink-100 pt-3 space-y-0.5">
-        <p>90% 預測區間（橫條淡色段），反映民調分歧度 + 選民結構轉移風險。</p>
-        <p>得票率 ≠ 勝率：兩候選人加總不為 100%，差值為棄票、小黨與無效票估算。</p>
-        <p>參考文獻：Jennings & Wlezien (2016), Yu & Lim (2021), Abramowitz (2012)。</p>
+        <p>橫條淡色部分為 90% 預測區間，反映各機構民調的分歧程度及歷史選民結構轉移風險。</p>
+        <p>得票率 ≠ 勝率：兩候選人預測得票率加總不等於 100%，差值為棄票、小黨支持及無效票估算。</p>
+        <p>學術參考：Jennings & Wlezien (2016), Yu & Lim (2021), Abramowitz (2012)。</p>
       </div>
     </div>
   )
