@@ -69,7 +69,7 @@ const INCUMBENCY_ADJUSTMENT: Record<IncumbencyStatus, number> = {
   challenger:       0.0,   // 挑戰方：無調整
 }
 
-function getHouseWeight(source: string): number {
+export function getHouseWeight(source: string): number {
   for (const [key, w] of Object.entries(HOUSE_WEIGHTS)) {
     if (source.includes(key)) return w
   }

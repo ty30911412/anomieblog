@@ -92,17 +92,17 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
 
           {/* ── α 分解 ── */}
           <section className="pt-5">
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-3">
               混合權重 α（民調 vs 結構先驗）
             </p>
             <div className="grid grid-cols-3 gap-3">
               {/* 時間因子 */}
               <div className="bg-ink-50 rounded-xl p-3">
-                <p className="text-[10px] text-ink-400 mb-1">時間因子</p>
+                <p className="text-xs text-ink-400 mb-1">時間因子</p>
                 <p className="font-mono font-bold text-ink-800 text-lg">
                   {Math.round(timeFactor * 100)}%
                 </p>
-                <p className="text-[10px] text-ink-400 mt-1">
+                <p className="text-xs text-ink-400 mt-1">
                   距選舉 {daysToElection} 天
                 </p>
                 <div className="mt-2 h-1 bg-ink-200 rounded-full">
@@ -115,11 +115,11 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
 
               {/* 民調數量因子 */}
               <div className="bg-ink-50 rounded-xl p-3">
-                <p className="text-[10px] text-ink-400 mb-1">民調筆數因子</p>
+                <p className="text-xs text-ink-400 mb-1">民調筆數因子</p>
                 <p className="font-mono font-bold text-ink-800 text-lg">
                   {Math.round(pollFactor * 100)}%
                 </p>
-                <p className="text-[10px] text-ink-400 mt-1">
+                <p className="text-xs text-ink-400 mt-1">
                   {agg.pollCount} 筆 ÷ 基準 6 筆
                 </p>
                 <div className="mt-2 h-1 bg-ink-200 rounded-full">
@@ -132,11 +132,11 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
 
               {/* 最終 α */}
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                <p className="text-[10px] text-amber-700 mb-1 font-bold">最終 α（取最大值）</p>
+                <p className="text-xs text-amber-700 mb-1 font-bold">最終 α（取最大值）</p>
                 <p className="font-mono font-bold text-amber-800 text-lg">
                   {Math.round(alpha * 100)}%
                 </p>
-                <p className="text-[10px] text-amber-600 mt-1">
+                <p className="text-xs text-amber-600 mt-1">
                   民調占最終預測比重
                 </p>
                 <div className="mt-2 h-1 bg-amber-200 rounded-full">
@@ -147,10 +147,10 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                 </div>
               </div>
             </div>
-            <p className="text-[10px] text-ink-300 mt-2 font-mono">
+            <p className="text-xs text-ink-400 mt-2 font-mono">
               α = max(時間因子, 民調因子) = max({Math.round(timeFactor * 100)}%, {Math.round(pollFactor * 100)}%) = {Math.round(alpha * 100)}%
             </p>
-            <p className="text-[10px] text-ink-300 font-mono">
+            <p className="text-xs text-ink-400 font-mono">
               時間因子 = 1 / (1 + e^((d−90)/30))，d={daysToElection}
             </p>
           </section>
@@ -158,7 +158,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
           {/* ── 2022 選民結構基準 ── */}
           {structuralPrior && (
             <section>
-              <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-3">
+              <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-3">
                 2022 選民結構基準（先驗）
               </p>
               <div className="space-y-2">
@@ -178,14 +178,14 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                       {/* 2022 原始得票 */}
                       <div className="text-ink-400 font-mono w-14 text-right shrink-0">
                         {raw}%
-                        <span className="text-[10px] text-ink-300 ml-0.5">原始</span>
+                        <span className="text-xs text-ink-400 ml-0.5">原始</span>
                       </div>
                       {/* 箭頭 */}
                       <span className="text-ink-300">→</span>
                       {/* 正規化 */}
                       <div className="text-ink-500 font-mono w-14 text-right shrink-0">
                         {norm}%
-                        <span className="text-[10px] text-ink-300 ml-0.5">正規</span>
+                        <span className="text-xs text-ink-400 ml-0.5">正規</span>
                       </div>
                       {/* 現任者調整 */}
                       <div className={`font-mono w-16 text-right shrink-0 ${INCUMBENCY_COLOR[status]}`}>
@@ -205,7 +205,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                   )
                 })}
               </div>
-              <p className="text-[10px] text-ink-300 mt-2">
+              <p className="text-xs text-ink-400 mt-2">
                 正規化後加入現任者效應調整，作為最終結構先驗（佔預測 {Math.round((1 - alpha) * 100)}%）
               </p>
             </section>
@@ -213,7 +213,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
 
           {/* ── 民調聚合貢獻 ── */}
           <section>
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-3">
               民調聚合結果（佔預測 {Math.round(alpha * 100)}%）
             </p>
             <div className="space-y-2">
@@ -225,14 +225,14 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                   </div>
                   <div className="text-ink-500 font-mono w-14 text-right shrink-0">
                     {agg.avgPct[c.name] ?? 0}%
-                    <span className="text-[10px] text-ink-300 ml-0.5">均值</span>
+                    <span className="text-xs text-ink-400 ml-0.5">均值</span>
                   </div>
                   <span className="text-ink-300">→</span>
                   <div className="text-ink-500 font-mono w-16 text-right shrink-0">
                     {agg.winProb[c.name] ?? 0}%
-                    <span className="text-[10px] text-ink-300 ml-0.5">勝率</span>
+                    <span className="text-xs text-ink-400 ml-0.5">勝率</span>
                   </div>
-                  <div className="text-[10px] text-ink-300 font-mono w-20 text-right shrink-0">
+                  <div className="text-xs text-ink-400 font-mono w-20 text-right shrink-0">
                     ±{agg.uncertainty[c.name] ?? 0}pp
                   </div>
                   <div className="flex-1">
@@ -250,10 +250,10 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
 
           {/* ── 最終混合公式 ── */}
           <section className="bg-ink-50 rounded-xl p-4">
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-3">
               最終預測公式
             </p>
-            <p className="text-[10px] font-mono text-ink-500 mb-2">
+            <p className="text-xs font-mono text-ink-500 mb-2">
               預測勝率 = α × 純民調勝率 + (1−α) × 調整後結構先驗
             </p>
             <div className="space-y-1.5">
@@ -262,7 +262,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                 const prior = adjustedPrior[c.name] ?? 0
                 const pred = agg.predictedProb[c.name] ?? 0
                 return (
-                  <div key={c.name} className="flex items-center gap-2 text-[11px] font-mono">
+                  <div key={c.name} className="flex items-center gap-2 text-xs font-mono">
                     <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
                     <span className="text-ink-600 w-14 shrink-0">{c.name}</span>
                     <span className="text-ink-400">
@@ -279,10 +279,10 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
 
           {/* ── 得票率預測分解 ── */}
           <section>
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-3">
+            <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-3">
               得票率預測公式
             </p>
-            <p className="text-[10px] font-mono text-ink-500 mb-2">
+            <p className="text-xs font-mono text-ink-500 mb-2">
               得票率 = α × (民調均值 + 未表態×60%分配) + (1−α) × (2022得票率 + 現任者效應)
             </p>
             <div className="space-y-1.5">
@@ -294,7 +294,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                   ? (structuralPrior[c.name] ?? 0) + INCUMBENCY_ADJ[c.incumbencyStatus ?? 'challenger']
                   : pollAdj
                 return (
-                  <div key={c.name} className="flex items-center gap-2 text-[11px] font-mono flex-wrap">
+                  <div key={c.name} className="flex items-center gap-2 text-xs font-mono flex-wrap">
                     <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
                     <span className="text-ink-600 w-14 shrink-0">{c.name}</span>
                     <span className="text-ink-400">
@@ -303,19 +303,19 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                     </span>
                     <span className="text-ink-300 mx-1">→</span>
                     <span className="font-bold" style={{ color: c.color }}>{proj}%</span>
-                    <span className="text-ink-300 text-[10px]">（{ci[0]}–{ci[1]}%）</span>
+                    <span className="text-ink-300 text-xs">（{ci[0]}–{ci[1]}%）</span>
                   </div>
                 )
               })}
             </div>
-            <p className="text-[10px] text-ink-300 mt-2">
+            <p className="text-xs text-ink-400 mt-2">
               未表態 {Math.max(0, Math.round((100 - agg.declaredTotal) * 10) / 10)}%，其中 60% 按比例分配，40% 歸棄票/小黨
             </p>
           </section>
 
           {/* ── House Weight 說明 ── */}
           <section>
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-2">
+            <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-2">
               民調機構權重（基於歷史準確率驗證）
             </p>
             <div className="flex flex-wrap gap-2">
@@ -330,13 +330,13 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                 { label: '其他',    w: '×0.8', note: '預設' },
               ].map(({ label, w, note }) => (
                 <div key={label} className="flex flex-col items-center text-center px-2.5 py-1.5 bg-ink-50 border border-ink-100 text-ink-600 rounded-lg">
-                  <span className="text-[10px] font-bold font-mono">{label}</span>
-                  <span className="text-[11px] font-mono font-bold text-amber-700">{w}</span>
-                  <span className="text-[9px] text-ink-300">{note}</span>
+                  <span className="text-xs font-bold font-mono">{label}</span>
+                  <span className="text-xs font-mono font-bold text-amber-700">{w}</span>
+                  <span className="text-[10px] text-ink-400">{note}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-3 space-y-0.5 text-[10px] text-ink-300">
+            <div className="mt-3 space-y-0.5 text-xs text-ink-400">
               <p>加法偏差修正：三立 / 自由時報 DPP +2pp（2022 驗證）；其他機構暫設 0。</p>
               <p>完整公式：w = √(n/1000) × e^(−d/21) × house_weight，並對民調數字套用加法偏差。</p>
               <p className="text-amber-600">校準來源：tstm.tw 選後民調大檢驗（2024）、vocus.cc 2022縣市長民調驗證。</p>
