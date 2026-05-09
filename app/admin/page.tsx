@@ -6,7 +6,7 @@ import { collection, onSnapshot, deleteDoc, doc, query, orderBy } from 'firebase
 import { signOut } from 'firebase/auth'
 import { db, auth } from '@/lib/firebase'
 import { BlogPost } from '@/types'
-import { Edit, Trash2, Plus, FileText, LogOut } from 'lucide-react'
+import { Edit, Trash2, Plus, FileText, LogOut, MessageSquare } from 'lucide-react'
 import AdminRoute from '@/components/AdminRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
 
@@ -52,6 +52,12 @@ function AdminDashboard() {
           <p className="text-ink-500 font-sans">管理您的所有發布內容。</p>
         </div>
         <div className="flex gap-3">
+          <Link
+            href="/admin/comments"
+            className="flex items-center gap-2 px-4 py-2.5 border border-ink-200 text-ink-500 rounded-lg hover:bg-ink-50 transition-colors font-bold text-sm"
+          >
+            <MessageSquare size={16} /> 留言管理
+          </Link>
           <button
             onClick={() => signOut(auth)}
             className="flex items-center gap-2 px-4 py-2.5 border border-ink-200 text-ink-500 rounded-lg hover:bg-ink-50 transition-colors font-bold text-sm"

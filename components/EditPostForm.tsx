@@ -93,7 +93,7 @@ export default function EditPostForm({ slug }: EditPostFormProps) {
   return (
     <div className="max-w-7xl mx-auto min-h-screen flex flex-col bg-paper">
       {/* Top Bar */}
-      <div className="sticky top-0 z-50 bg-paper/95 backdrop-blur border-b border-ink-200 px-4 py-3 flex justify-between items-center shadow-md">
+      <div className="sticky top-14 z-30 bg-paper/95 backdrop-blur border-b border-ink-200 px-4 py-3 flex justify-between items-center shadow-md">
         <div className="flex items-center gap-4">
           <Link
             href="/admin"
@@ -242,7 +242,7 @@ export default function EditPostForm({ slug }: EditPostFormProps) {
         </div>
 
         {/* 右側：即時預覽 */}
-        <div className={`bg-white rounded-xl shadow-sm border border-ink-100 overflow-hidden h-fit sticky top-20 ${previewMode ? 'block' : 'hidden lg:block'}`}>
+        <div className={`bg-white rounded-xl shadow-sm border border-ink-100 overflow-hidden h-fit sticky top-28 ${previewMode ? 'block' : 'hidden lg:block'}`}>
           <div className="px-4 py-3 bg-ink-50 border-b border-ink-100 flex items-center gap-2">
             <Eye size={16} className="text-ink-400" />
             <span className="text-sm font-bold text-ink-600">即時預覽</span>
