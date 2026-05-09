@@ -33,7 +33,7 @@ async function getRelatedPosts(currentSlug: string, tags: string[]) {
   const scored = snap.docs
     .filter((d) => d.id !== currentSlug)
     .map((d) => {
-      const data = d.data() as BlogPost
+      const { slug: _s, ...data } = d.data() as BlogPost
       const overlap = (data.tags || []).filter((t) => tags.includes(t)).length
       return { slug: d.id, ...data, overlap }
     })
