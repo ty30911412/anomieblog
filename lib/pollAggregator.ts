@@ -1,88 +1,174 @@
-import { ElectionPoll, ElectionCandidate } from '@/types'
+import { ElectionPoll, ElectionCandidate, IncumbencyStatus } from '@/types'
 
 /**
- * 加權民調聚合 — 借鑑「無情真實的未來預測」方法論
+ * 加權民調聚合 — 整合四項學術改進
  *
- * 權重來源：
- *   1. 機構效應 (House Effect)：各機構依歷史準確率給予加權
- *      TVBS × 2.0、美麗島 × 1.0、ETtoday × 1.0、山水 × 1.0、其他 × 0.8
- *   2. 樣本數：√(n / 1000)，大樣本獲得較高權重
- *   3. 時間衰減：exp(-d / 21)，半衰期 21 天
+ * 理論依據：
+ *   - Linzer (2013, JASA)：動態貝葉斯模型，α 應以「距選舉日天數」為函數
+ *   - Silver / FiveThirtyEight：House Effect 分離「權重」與「加法偏差修正」
+ *   - Yu & Lim (2021)：台灣縣市長選舉的現任者劣勢 (-2~4%)
+ *   - Graefe et al. (2014)：民調聚合在選前最後 90 天才明顯優於基本面模型
  *
- * 最終預測：
- *   若有 2022 選民結構基準，則混合民調聚合與結構基準：
- *   prediction = α × poll_avg + (1-α) × structural_prior
- *   α = min(1, pollCount / 6)，民調越多 α 越大（趨向完全信任民調）
- *
- * 參考：https://tsjh301.blogspot.com/
+ * 四項改進：
+ *   1. α 時間函數：結合民調數量與距選舉日天數（logistic 曲線）
+ *   2. House Effect：分離乘法權重（準確率）與加法偏差修正（系統誤差）
+ *   3. 現任者效應：依 incumbencyStatus 調整結構先驗
+ *   4. 不確定性量化：回傳標準差與 95% 信賴區間
  */
 
-/** 各民調機構的歷史準確率加權係數 */
+// ── 1. House Effect：乘法權重（準確率代理） ──────────────────────────────────
+// 資料來源：tsjh301 方法論 + 台灣媒體民調歷史準確率評估
 const HOUSE_WEIGHTS: Record<string, number> = {
-  'TVBS': 2.0,
-  'TVBS民調中心': 2.0,
-  '美麗島': 1.0,
-  '美麗島電子報': 1.0,
-  '美麗島民調': 1.0,
-  'ETtoday': 1.0,
-  'ETtoday民調雲': 1.0,
-  '山水': 1.0,
-  '山水民意': 1.0,
-  '震傳媒': 1.0,
-  '趨勢民調': 0.8,
-  '聯合報': 0.8,
+  'TVBS':          2.0,
+  'TVBS民調中心':   2.0,
+  '美麗島':         1.0,
+  '美麗島電子報':   1.0,
+  '美麗島民調':     1.0,
+  'ETtoday':       1.0,
+  'ETtoday民調雲':  1.0,
+  '山水':           1.0,
+  '山水民意':       1.0,
+  '震傳媒':         1.0,
+  '趨勢民調':       0.8,
+  '聯合報':         0.8,
+}
+
+// ── 2. House Effect：加法偏差修正（正值 = 此機構高估該黨，百分點） ───────────
+// 初期因台灣歷史驗證資料有限，設 0（無偏假設）；選後可依誤差逐步校準
+// 範例（有驗證資料後填入）：
+//   'TVBS':   { KMT: +1.5, DPP: -1.5 }
+//   '美麗島': { KMT: -1.0, DPP: +1.0 }
+const HOUSE_BIAS: Record<string, Partial<Record<'KMT' | 'DPP', number>>> = {}
+
+// ── 3. 現任者效應調整（百分點，加法） ────────────────────────────────────────
+// 根據 Yu & Lim (2021) 台灣縣市長選舉文獻
+// 調整施於「結構先驗」而非民調聚合值
+const INCUMBENCY_ADJUSTMENT: Record<IncumbencyStatus, number> = {
+  incumbent:       -3.0,   // 現任者劣勢：台灣文獻中位數約 -3pp
+  party_successor: -1.5,   // 接班人折扣：繼承執政包袱但非現任者本人
+  challenger:       0.0,   // 挑戰方：無調整
 }
 
 function getHouseWeight(source: string): number {
-  // 模糊匹配：來源名稱包含關鍵字即可
   for (const [key, w] of Object.entries(HOUSE_WEIGHTS)) {
     if (source.includes(key)) return w
   }
   return 0.8
 }
 
+function getHouseBias(source: string, label: 'KMT' | 'DPP'): number {
+  for (const [key, bias] of Object.entries(HOUSE_BIAS)) {
+    if (source.includes(key)) return bias[label] ?? 0
+  }
+  return 0
+}
+
+function partyLabel(party: string): 'KMT' | 'DPP' {
+  if (party.includes('國民黨') || party === 'KMT') return 'KMT'
+  return 'DPP'
+}
+
+// ── α 計算：Linzer (2013) 時間函數 + 民調數量 ──────────────────────────────
+// α 決定最終預測中「民調」vs「結構先驗」的比重，兩因子取最大值
+//
+// timeFactor：logistic 曲線，以選前 90 天為基準點（0.5）
+//   200 天前 ≈ 0.02  →  幾乎全靠結構先驗
+//    90 天前 ≈ 0.50  →  各半
+//    30 天前 ≈ 0.88  →  強烈依賴民調
+//     0 天   = 1.00  →  完全依賴民調
+//
+// pollFactor：min(1, polls/6)，6 筆以上民調時完全信任民調
+function computeAlpha(pollCount: number, electionDate: string): number {
+  const daysToElection = Math.max(
+    0,
+    (new Date(electionDate).getTime() - Date.now()) / 86400000
+  )
+  const pollFactor = Math.min(1, pollCount / 6)
+  const timeFactor = daysToElection === 0
+    ? 1.0
+    : 1 / (1 + Math.exp((daysToElection - 90) / 30))
+  return Math.min(1, Math.max(pollFactor, timeFactor))
+}
+
+// ── 不確定性計算 ─────────────────────────────────────────────────────────────
+// 若近 90 天民調 < 2 筆：以抽樣誤差估算（n=1000 預設）
+// 若近 90 天民調 ≥ 2 筆：機構間標準差（反映民調分歧程度）
+function computeUncertainty(
+  polls: ElectionPoll[],
+  candidateName: string,
+  avgPct: number
+): number {
+  const recent = polls
+    .filter((p) => (Date.now() - new Date(p.date).getTime()) / 86400000 <= 90)
+    .map((p) => p.results.find((r) => r.name === candidateName)?.percentage)
+    .filter((v): v is number => v !== undefined)
+
+  if (recent.length < 2) {
+    // 抽樣誤差：95% CI 半寬 = √(p(1-p)/n) × 1.96，n=1000
+    const p = Math.min(Math.max((avgPct ?? 40) / 100, 0.01), 0.99)
+    return Math.round(Math.sqrt((p * (1 - p)) / 1000) * 196) / 10
+  }
+
+  const mean = recent.reduce((a, b) => a + b, 0) / recent.length
+  const variance = recent.reduce((a, b) => a + (b - mean) ** 2, 0) / recent.length
+  return Math.round(Math.sqrt(variance) * 10) / 10
+}
+
+// ── 主要匯出介面 ─────────────────────────────────────────────────────────────
+
 export interface AggregationResult {
-  /** 加權平均民調支持度 */
+  /** 加權平均民調支持度（原始民調數字，已做 House Bias 修正） */
   avgPct: Record<string, number>
-  /** 正規化相對勝率（純民調聚合） */
+  /** 正規化相對勝率（純民調，無結構先驗） */
   winProb: Record<string, number>
-  /** 混合選民結構後的預測勝率（若有 structuralPrior） */
+  /** 最終預測勝率（民調 + 結構先驗 + 現任者效應） */
   predictedProb: Record<string, number>
+  /** 民調的 95% 不確定性半寬（百分點） */
+  uncertainty: Record<string, number>
+  /** 民調的 95% 信賴區間 [下界, 上界]（百分點） */
+  confidenceInterval: Record<string, [number, number]>
   leader: ElectionCandidate
   pollCount: number
-  /** 民調在最終預測中的權重（0–1） */
+  /** 民調在最終預測中的權重（0–1），由時間 + 筆數動態決定 */
   pollWeight: number
+  /** 距選舉日天數（整數） */
+  daysToElection: number
 }
 
 export function aggregatePolls(
   polls: ElectionPoll[],
   candidates: ElectionCandidate[],
   /** 2022 得票率作為選民結構基準，例如 { '蔣萬安': 62.0, '陳時中': 31.0 } */
-  structuralPrior?: Record<string, number>
+  structuralPrior?: Record<string, number>,
+  /** 選舉日期（用於 α 時間函數），格式 'YYYY-MM-DD' */
+  electionDate?: string
 ): AggregationResult | null {
   if (polls.length === 0) return null
 
   const now = new Date()
+  const targetDate = electionDate ?? '2026-11-28'
   const sums: Record<string, number> = {}
   const totalW: Record<string, number> = {}
   candidates.forEach((c) => { sums[c.name] = 0; totalW[c.name] = 0 })
 
+  // ── 加權聚合（含加法 House Bias 修正） ──
   polls.forEach((poll) => {
     const daysAgo = (now.getTime() - new Date(poll.date).getTime()) / 86400000
     const recency = Math.exp(-daysAgo / 21)
-    const sizeW  = Math.sqrt((poll.sampleSize ?? 1000) / 1000)
-    const houseW = getHouseWeight(poll.source)
+    const sizeW   = Math.sqrt((poll.sampleSize ?? 1000) / 1000)
+    const houseW  = getHouseWeight(poll.source)
     const w = recency * sizeW * houseW
 
     poll.results.forEach((r) => {
-      if (sums[r.name] !== undefined) {
-        sums[r.name] += w * r.percentage
-        totalW[r.name] += w
-      }
+      if (sums[r.name] === undefined) return
+      const cand = candidates.find((c) => c.name === r.name)
+      const bias = cand ? getHouseBias(poll.source, partyLabel(cand.party)) : 0
+      sums[r.name] += w * (r.percentage - bias)
+      totalW[r.name] += w
     })
   })
 
-  // 加權平均
+  // ── 加權平均 ──
   const avgPct: Record<string, number> = {}
   candidates.forEach((c) => {
     avgPct[c.name] = totalW[c.name] > 0
@@ -90,7 +176,19 @@ export function aggregatePolls(
       : 0
   })
 
-  // 純民調勝率（正規化）
+  // ── 不確定性與信賴區間 ──
+  const uncertainty: Record<string, number> = {}
+  const confidenceInterval: Record<string, [number, number]> = {}
+  candidates.forEach((c) => {
+    const u = computeUncertainty(polls, c.name, avgPct[c.name])
+    uncertainty[c.name] = u
+    confidenceInterval[c.name] = [
+      Math.max(0, Math.round((avgPct[c.name] - u * 1.96) * 10) / 10),
+      Math.min(100, Math.round((avgPct[c.name] + u * 1.96) * 10) / 10),
+    ]
+  })
+
+  // ── 純民調勝率（正規化） ──
   const pollTotal = Object.values(avgPct).reduce((a, b) => a + b, 0)
   const winProb: Record<string, number> = {}
   candidates.forEach((c) => {
@@ -99,19 +197,49 @@ export function aggregatePolls(
       : 0
   })
 
-  // 混合預測勝率（民調 + 選民結構基準）
-  // α = min(1, pollCount / 6)：有 6 筆以上民調時完全信任民調
-  const alpha = Math.min(1, polls.length / 6)
+  // ── α：時間函數 + 民調數量（Linzer 2013） ──
+  const alpha = computeAlpha(polls.length, targetDate)
+  const daysToElection = Math.round(
+    Math.max(0, (new Date(targetDate).getTime() - now.getTime()) / 86400000)
+  )
+
+  // ── 最終預測：民調 + 結構先驗（含現任者效應） ──
   const predictedProb: Record<string, number> = {}
 
   if (structuralPrior) {
+    // 步驟 1：正規化結構先驗
     const priorTotal = Object.values(structuralPrior).reduce((a, b) => a + b, 0)
+    const normalizedPrior: Record<string, number> = {}
     candidates.forEach((c) => {
-      const priorPct = priorTotal > 0 ? (structuralPrior[c.name] ?? 0) / priorTotal * 100 : 0
-      const blended = alpha * winProb[c.name] + (1 - alpha) * priorPct
-      predictedProb[c.name] = Math.round(blended * 10) / 10
+      normalizedPrior[c.name] = priorTotal > 0
+        ? (structuralPrior[c.name] ?? 0) / priorTotal * 100
+        : 0
     })
-    // 重新正規化
+
+    // 步驟 2：套用現任者效應（調整結構先驗）
+    const adjustedPrior: Record<string, number> = {}
+    candidates.forEach((c) => {
+      const status = c.incumbencyStatus ?? 'challenger'
+      adjustedPrior[c.name] = normalizedPrior[c.name] + INCUMBENCY_ADJUSTMENT[status]
+    })
+
+    // 步驟 3：重新正規化調整後先驗
+    const adjTotal = Object.values(adjustedPrior).reduce((a, b) => a + b, 0)
+    const renormPrior: Record<string, number> = {}
+    candidates.forEach((c) => {
+      renormPrior[c.name] = adjTotal > 0
+        ? adjustedPrior[c.name] / adjTotal * 100
+        : normalizedPrior[c.name]
+    })
+
+    // 步驟 4：混合（α 加權）
+    candidates.forEach((c) => {
+      predictedProb[c.name] = Math.round(
+        (alpha * winProb[c.name] + (1 - alpha) * renormPrior[c.name]) * 10
+      ) / 10
+    })
+
+    // 步驟 5：正規化確保總和 100
     const predTotal = Object.values(predictedProb).reduce((a, b) => a + b, 0)
     if (predTotal > 0) {
       candidates.forEach((c) => {
@@ -119,14 +247,35 @@ export function aggregatePolls(
       })
     }
   } else {
-    candidates.forEach((c) => { predictedProb[c.name] = winProb[c.name] })
+    // 無結構先驗時，現任者效應直接套在民調勝率上
+    const adjusted: Record<string, number> = {}
+    candidates.forEach((c) => {
+      const status = c.incumbencyStatus ?? 'challenger'
+      adjusted[c.name] = winProb[c.name] + INCUMBENCY_ADJUSTMENT[status]
+    })
+    const adjTotal = Object.values(adjusted).reduce((a, b) => a + b, 0)
+    candidates.forEach((c) => {
+      predictedProb[c.name] = adjTotal > 0
+        ? Math.round((adjusted[c.name] / adjTotal) * 1000) / 10
+        : winProb[c.name]
+    })
   }
 
   const leader = candidates.reduce((a, b) =>
     (predictedProb[a.name] ?? 0) >= (predictedProb[b.name] ?? 0) ? a : b
   )
 
-  return { avgPct, winProb, predictedProb, leader, pollCount: polls.length, pollWeight: alpha }
+  return {
+    avgPct,
+    winProb,
+    predictedProb,
+    uncertainty,
+    confidenceInterval,
+    leader,
+    pollCount: polls.length,
+    pollWeight: alpha,
+    daysToElection,
+  }
 }
 
 /** recharts 折線圖時間序列資料 */
@@ -148,16 +297,13 @@ export function buildTrendData(
   })
 }
 
-/** 計算各機構間的標準差（民調分散程度），用於顯示不確定性 */
+/** 計算各機構間標準差，供外部 UI 使用 */
 export function pollUncertainty(
   polls: ElectionPoll[],
   candidateName: string
 ): number {
   const recent = polls
-    .filter((p) => {
-      const days = (Date.now() - new Date(p.date).getTime()) / 86400000
-      return days <= 60
-    })
+    .filter((p) => (Date.now() - new Date(p.date).getTime()) / 86400000 <= 60)
     .map((p) => p.results.find((r) => r.name === candidateName)?.percentage ?? null)
     .filter((v): v is number => v !== null)
 

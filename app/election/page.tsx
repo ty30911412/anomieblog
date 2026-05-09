@@ -76,7 +76,12 @@ export default function ElectionPage() {
 
   const agg = useMemo(
     () => selectedRace
-      ? aggregatePolls(selectedPolls, selectedRace.candidates, STRUCTURAL_PRIOR[selectedRace.id])
+      ? aggregatePolls(
+          selectedPolls,
+          selectedRace.candidates,
+          STRUCTURAL_PRIOR[selectedRace.id],
+          selectedRace.electionDate,
+        )
       : null,
     [selectedPolls, selectedRace]
   )
@@ -135,7 +140,7 @@ export default function ElectionPage() {
                   <div className="flex flex-row lg:flex-col gap-1.5 flex-wrap">
                     {regionRaces.map((race) => {
                       const racePolls = polls.filter((p) => p.raceId === race.id)
-                      const raceAgg = aggregatePolls(racePolls, race.candidates, STRUCTURAL_PRIOR[race.id])
+                      const raceAgg = aggregatePolls(racePolls, race.candidates, STRUCTURAL_PRIOR[race.id], race.electionDate)
                       const leader = raceAgg?.leader
                       const isSelected = selectedId === race.id
 
@@ -204,7 +209,10 @@ export default function ElectionPage() {
                       winProb={agg.winProb}
                       predictedProb={agg.predictedProb}
                       avgPct={agg.avgPct}
+                      uncertainty={agg.uncertainty}
+                      confidenceInterval={agg.confidenceInterval}
                       pollWeight={agg.pollWeight}
+                      daysToElection={agg.daysToElection}
                     />
                   ) : (
                     <p className="text-ink-300 text-sm">尚無民調資料</p>

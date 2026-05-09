@@ -53,8 +53,9 @@ const RACES = [
     city: '台北市', region: '北部', order: 1,
     electionDate: '2026-11-28', isActive: true,
     candidates: [
-      { name: '蔣萬安', party: '中國國民黨', color: '#000095' },
-      { name: '沈伯洋', party: '民主進步黨', color: '#1b9431' },
+      // 蔣萬安為現任台北市長競選連任
+      { name: '蔣萬安', party: '中國國民黨', color: '#000095', incumbencyStatus: 'incumbent' },
+      { name: '沈伯洋', party: '民主進步黨', color: '#1b9431', incumbencyStatus: 'challenger' },
     ],
   },
   {
@@ -62,8 +63,9 @@ const RACES = [
     city: '新北市', region: '北部', order: 2,
     electionDate: '2026-11-28', isActive: true,
     candidates: [
-      { name: '李四川', party: '中國國民黨', color: '#000095' },
-      { name: '蘇巧慧', party: '民主進步黨', color: '#1b9431' },
+      // 侯友宜任期屆滿，李四川為同黨接班
+      { name: '李四川', party: '中國國民黨', color: '#000095', incumbencyStatus: 'party_successor' },
+      { name: '蘇巧慧', party: '民主進步黨', color: '#1b9431', incumbencyStatus: 'challenger' },
     ],
   },
   {
@@ -71,8 +73,9 @@ const RACES = [
     city: '桃園市', region: '北部', order: 3,
     electionDate: '2026-11-28', isActive: true,
     candidates: [
-      { name: '張善政', party: '中國國民黨', color: '#000095' },
-      { name: '黃世杰', party: '民主進步黨', color: '#1b9431' },
+      // 張善政為現任桃園市長競選連任
+      { name: '張善政', party: '中國國民黨', color: '#000095', incumbencyStatus: 'incumbent' },
+      { name: '黃世杰', party: '民主進步黨', color: '#1b9431', incumbencyStatus: 'challenger' },
     ],
   },
   {
@@ -80,8 +83,9 @@ const RACES = [
     city: '台中市', region: '中部', order: 4,
     electionDate: '2026-11-28', isActive: true,
     candidates: [
-      { name: '江啟臣', party: '中國國民黨', color: '#000095' },
-      { name: '何欣純', party: '民主進步黨', color: '#1b9431' },
+      // 盧秀燕任期屆滿，江啟臣為同黨接班
+      { name: '江啟臣', party: '中國國民黨', color: '#000095', incumbencyStatus: 'party_successor' },
+      { name: '何欣純', party: '民主進步黨', color: '#1b9431', incumbencyStatus: 'challenger' },
     ],
   },
   {
@@ -89,8 +93,9 @@ const RACES = [
     city: '台南市', region: '南部', order: 5,
     electionDate: '2026-11-28', isActive: true,
     candidates: [
-      { name: '謝龍介', party: '中國國民黨', color: '#000095' },
-      { name: '陳亭妃', party: '民主進步黨', color: '#1b9431' },
+      { name: '謝龍介', party: '中國國民黨', color: '#000095', incumbencyStatus: 'challenger' },
+      // 黃偉哲任期屆滿，陳亭妃為同黨接班
+      { name: '陳亭妃', party: '民主進步黨', color: '#1b9431', incumbencyStatus: 'party_successor' },
     ],
   },
   {
@@ -98,8 +103,9 @@ const RACES = [
     city: '高雄市', region: '南部', order: 6,
     electionDate: '2026-11-28', isActive: true,
     candidates: [
-      { name: '柯志恩', party: '中國國民黨', color: '#000095' },
-      { name: '賴瑞隆', party: '民主進步黨', color: '#1b9431' },
+      { name: '柯志恩', party: '中國國民黨', color: '#000095', incumbencyStatus: 'challenger' },
+      // 陳其邁任期屆滿，賴瑞隆為同黨接班
+      { name: '賴瑞隆', party: '民主進步黨', color: '#1b9431', incumbencyStatus: 'party_successor' },
     ],
   },
 ]

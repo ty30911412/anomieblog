@@ -23,10 +23,17 @@ export interface Comment {
 
 // ── 選舉模塊 ──────────────────────────────────────
 
+/** 候選人現任狀態，影響結構先驗的調整幅度 */
+export type IncumbencyStatus =
+  | 'incumbent'        // 現任者競選連任（台灣文獻顯示有 -2~4% 劣勢）
+  | 'party_successor'  // 同黨接班候選人（現任者任期屆滿）
+  | 'challenger'       // 挑戰方（無現任包袱）
+
 export interface ElectionCandidate {
   name: string
   party: string
-  color: string   // chart hex color，例如 '#2563eb'
+  color: string              // chart hex color，例如 '#2563eb'
+  incumbencyStatus?: IncumbencyStatus  // 未填時視為 'challenger'
 }
 
 export interface ElectionRace {
