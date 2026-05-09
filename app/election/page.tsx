@@ -4,7 +4,18 @@ import { useState, useEffect, useMemo } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { ElectionRace, ElectionPoll, BlogPost } from '@/types'
-import { aggregatePolls, buildTrendData } from '@/lib/pollAggregator'
+import { aggregatePolls, buildTrendData, pollUncertainty } from '@/lib/pollAggregator'
+
+// 2022 縣市長得票率作為選民結構基準（藍綠對決格局）
+// 資料來源：中選會 2022 年選舉結果
+const STRUCTURAL_PRIOR: Record<string, Record<string, number>> = {
+  'taipei':     { '蔣萬安': 62.0, '陳時中': 31.8 },   // 蔣62 vs 陳31
+  'new-taipei': { '侯友宜': 69.9, '林佳龍': 25.5 },   // 侯70 vs 林25（以2022格局推估新候選人基準）
+  'taoyuan':    { '張善政': 54.8, '鄭運鵬': 38.2 },   // 張55 vs 鄭38
+  'taichung':   { '盧秀燕': 58.5, '蔡其昌': 36.5 },   // 盧59 vs 蔡37（接班人基準）
+  'tainan':     { '謝龍介': 36.6, '黃偉哲': 59.8 },   // 謝37 vs 黃60（接班人基準）
+  'kaohsiung':  { '柯志恩': 37.3, '陳其邁': 59.9 },   // 柯37 vs 陳60（接班人基準）
+}
 import WinProbabilityBar from '@/components/election/WinProbabilityBar'
 import PollTrendChart from '@/components/election/PollTrendChart'
 import PollSourceTable from '@/components/election/PollSourceTable'
@@ -64,7 +75,9 @@ export default function ElectionPage() {
   )
 
   const agg = useMemo(
-    () => selectedRace ? aggregatePolls(selectedPolls, selectedRace.candidates) : null,
+    () => selectedRace
+      ? aggregatePolls(selectedPolls, selectedRace.candidates, STRUCTURAL_PRIOR[selectedRace.id])
+      : null,
     [selectedPolls, selectedRace]
   )
 
@@ -122,7 +135,7 @@ export default function ElectionPage() {
                   <div className="flex flex-row lg:flex-col gap-1.5 flex-wrap">
                     {regionRaces.map((race) => {
                       const racePolls = polls.filter((p) => p.raceId === race.id)
-                      const raceAgg = aggregatePolls(racePolls, race.candidates)
+                      const raceAgg = aggregatePolls(racePolls, race.candidates, STRUCTURAL_PRIOR[race.id])
                       const leader = raceAgg?.leader
                       const isSelected = selectedId === race.id
 
@@ -189,7 +202,9 @@ export default function ElectionPage() {
                     <WinProbabilityBar
                       candidates={selectedRace.candidates}
                       winProb={agg.winProb}
+                      predictedProb={agg.predictedProb}
                       avgPct={agg.avgPct}
+                      pollWeight={agg.pollWeight}
                     />
                   ) : (
                     <p className="text-ink-300 text-sm">尚無民調資料</p>
