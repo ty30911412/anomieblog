@@ -121,12 +121,27 @@ export interface AggregationResult {
   avgPct: Record<string, number>
   /** 正規化相對勝率（純民調，無結構先驗） */
   winProb: Record<string, number>
-  /** 最終預測勝率（民調 + 結構先驗 + 現任者效應） */
+  /** 最終預測勝率（民調 + 結構先驗 + 現任者效應，正規化至 100%） */
   predictedProb: Record<string, number>
   /** 民調的 95% 不確定性半寬（百分點） */
   uncertainty: Record<string, number>
   /** 民調的 95% 信賴區間 [下界, 上界]（百分點） */
   confidenceInterval: Record<string, [number, number]>
+
+  // ── 得票率預測（Vote Share Forecast）──────────────────────────────────────
+  // 與勝率不同：得票率是絕對值，不正規化至 100%
+  // 方法：民調調整（未表態比例分配）× α + 結構先驗得票率 × (1-α)
+  // 參考：Jennings & Wlezien (2016), Yu & Lim (2021), Abramowitz (2012)
+
+  /** 民調調整後的預測得票率（含未表態按比例分配 60%） */
+  pollVoteShare: Record<string, number>
+  /** 最終預測得票率（混合民調 + 2022 結構先驗，未正規化） */
+  projectedVoteShare: Record<string, number>
+  /** 得票率 90% 預測區間 [低, 高]（比勝率 CI 更寬：不確定性 × 2.5） */
+  voteShareCI: Record<string, [number, number]>
+  /** 民調中明確表態的比例總和（100 − 未表態） */
+  declaredTotal: number
+
   leader: ElectionCandidate
   pollCount: number
   /** 民調在最終預測中的權重（0–1），由時間 + 筆數動態決定 */
@@ -265,12 +280,71 @@ export function aggregatePolls(
     (predictedProb[a.name] ?? 0) >= (predictedProb[b.name] ?? 0) ? a : b
   )
 
+  // ── 得票率預測（Vote Share Forecast） ────────────────────────────────────
+  //
+  // 步驟 1：計算民調中明確表態的加總
+  //   台灣縣市長民調通常有 15–25% 未表態／拒答；這些人選舉日多數仍按政黨認同投票
+  //   策略：將未表態的 60% 按現有民調比例分配（其餘 40% 歸棄票/小黨）
+  //   根據：Jennings & Wlezien 2016（45 國實證），Yi & Lim 2021（台灣本土）
+  //
+  const declaredTotal = Object.values(avgPct).reduce((a, b) => a + b, 0)
+  const undecidedShare = Math.max(0, 100 - declaredTotal)
+
+  // 步驟 2：民調調整得票率（poll_vote_share）
+  const pollVoteShare: Record<string, number> = {}
+  candidates.forEach((c) => {
+    const proportionalAlloc = declaredTotal > 0
+      ? undecidedShare * 0.6 * (avgPct[c.name] / declaredTotal)
+      : 0
+    pollVoteShare[c.name] = Math.round((avgPct[c.name] + proportionalAlloc) * 10) / 10
+  })
+
+  // 步驟 3：結構先驗得票率（raw 2022 得票率，含現任者效應，但不正規化到 100%）
+  //   與勝率預測的差異：得票率用原始數字（e.g., 蔣 62%），不是正規化後的 winShare
+  //   現任者效應仍然套用（-3pp / -1.5pp），但在原始空間而非正規化空間
+  const priorVoteShare: Record<string, number> = {}
+  if (structuralPrior) {
+    candidates.forEach((c) => {
+      const status = c.incumbencyStatus ?? 'challenger'
+      priorVoteShare[c.name] = (structuralPrior[c.name] ?? pollVoteShare[c.name])
+        + INCUMBENCY_ADJUSTMENT[status]
+    })
+  } else {
+    candidates.forEach((c) => { priorVoteShare[c.name] = pollVoteShare[c.name] })
+  }
+
+  // 步驟 4：混合（同一個 α）
+  const projectedVoteShare: Record<string, number> = {}
+  candidates.forEach((c) => {
+    projectedVoteShare[c.name] = Math.round(
+      (alpha * pollVoteShare[c.name] + (1 - alpha) * priorVoteShare[c.name]) * 10
+    ) / 10
+  })
+
+  // 步驟 5：得票率 90% 預測區間
+  //   得票率 CI 比勝率更寬：
+  //   - 不確定性乘以 2.5（vs 勝率的 1.96），反映絕對值預測誤差更大
+  //   - 台灣 2018/2022 縣市長民調 MAE 約 ±3–5pp，加上選民結構轉移風險
+  const voteShareCI: Record<string, [number, number]> = {}
+  candidates.forEach((c) => {
+    const u = uncertainty[c.name] ?? 3.0
+    const margin = Math.round(u * 2.5 * 10) / 10
+    voteShareCI[c.name] = [
+      Math.max(0, Math.round((projectedVoteShare[c.name] - margin) * 10) / 10),
+      Math.min(100, Math.round((projectedVoteShare[c.name] + margin) * 10) / 10),
+    ]
+  })
+
   return {
     avgPct,
     winProb,
     predictedProb,
     uncertainty,
     confidenceInterval,
+    pollVoteShare,
+    projectedVoteShare,
+    voteShareCI,
+    declaredTotal: Math.round(declaredTotal * 10) / 10,
     leader,
     pollCount: polls.length,
     pollWeight: alpha,

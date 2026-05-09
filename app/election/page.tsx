@@ -31,11 +31,12 @@ function buildPrior(race: { id: string; candidates: { name: string; party: strin
 }
 import WinProbabilityBar from '@/components/election/WinProbabilityBar'
 import ModelBreakdown from '@/components/election/ModelBreakdown'
+import VoteShareForecast from '@/components/election/VoteShareForecast'
 import PollTrendChart from '@/components/election/PollTrendChart'
 import PollSourceTable from '@/components/election/PollSourceTable'
 import Link from 'next/link'
 import Image from 'next/image'
-import { BarChart2, Info, Calendar, Clock, FileText } from 'lucide-react'
+import { BarChart2, Info, Calendar, Clock, FileText, TrendingUp } from 'lucide-react'
 
 export default function ElectionPage() {
   const [races, setRaces] = useState<ElectionRace[]>([])
@@ -240,6 +241,19 @@ export default function ElectionPage() {
                     agg={agg}
                     structuralPrior={buildPrior(selectedRace)}
                   />
+                )}
+
+                {/* 得票率預測 */}
+                {agg && (
+                  <div className="bg-white border border-ink-200 rounded-2xl p-6 shadow-sm">
+                    <div className="flex items-center gap-2 mb-5">
+                      <TrendingUp size={14} className="text-ink-400" />
+                      <h3 className="font-sans text-xs font-bold text-ink-500 uppercase tracking-widest">
+                        預測得票率
+                      </h3>
+                    </div>
+                    <VoteShareForecast candidates={selectedRace.candidates} agg={agg} />
+                  </div>
                 )}
 
                 {/* 趨勢圖 */}

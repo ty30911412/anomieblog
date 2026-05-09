@@ -277,6 +277,42 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
             </div>
           </section>
 
+          {/* ── 得票率預測分解 ── */}
+          <section>
+            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-3">
+              得票率預測公式
+            </p>
+            <p className="text-[10px] font-mono text-ink-500 mb-2">
+              得票率 = α × (民調均值 + 未表態×60%分配) + (1−α) × (2022得票率 + 現任者效應)
+            </p>
+            <div className="space-y-1.5">
+              {race.candidates.map((c) => {
+                const pollAdj = agg.pollVoteShare?.[c.name] ?? 0
+                const proj = agg.projectedVoteShare?.[c.name] ?? 0
+                const ci = agg.voteShareCI?.[c.name] ?? [0, 0]
+                const priorVS = structuralPrior
+                  ? (structuralPrior[c.name] ?? 0) + INCUMBENCY_ADJ[c.incumbencyStatus ?? 'challenger']
+                  : pollAdj
+                return (
+                  <div key={c.name} className="flex items-center gap-2 text-[11px] font-mono flex-wrap">
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
+                    <span className="text-ink-600 w-14 shrink-0">{c.name}</span>
+                    <span className="text-ink-400">
+                      = {Math.round(alpha * 100)}% × {pollAdj}%
+                      {structuralPrior && ` + ${Math.round((1 - alpha) * 100)}% × ${Math.round(priorVS * 10) / 10}%`}
+                    </span>
+                    <span className="text-ink-300 mx-1">→</span>
+                    <span className="font-bold" style={{ color: c.color }}>{proj}%</span>
+                    <span className="text-ink-300 text-[10px]">（{ci[0]}–{ci[1]}%）</span>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="text-[10px] text-ink-300 mt-2">
+              未表態 {Math.max(0, Math.round((100 - agg.declaredTotal) * 10) / 10)}%，其中 60% 按比例分配，40% 歸棄票/小黨
+            </p>
+          </section>
+
           {/* ── House Weight 說明 ── */}
           <section>
             <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-2">
