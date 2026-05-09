@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { collection, getDocs, addDoc, deleteDoc, doc, setDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { ElectionRace, ElectionPoll, ElectionCandidate } from '@/types'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth, AuthProvider } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { Plus, Trash2, ChevronDown, ChevronUp, Save } from 'lucide-react'
 
@@ -17,7 +17,7 @@ const PARTY_COLORS: Record<string, string> = {
 
 const REGIONS = ['北部', '中部', '南部', '東部', '離島']
 
-export default function ElectionAdminPage() {
+function ElectionAdminPage() {
   const { currentUser } = useAuth()
   const router = useRouter()
   const [races, setRaces] = useState<ElectionRace[]>([])
@@ -330,5 +330,13 @@ export default function ElectionAdminPage() {
         }
       `}</style>
     </div>
+  )
+}
+
+export default function ElectionAdminPageWrapper() {
+  return (
+    <AuthProvider>
+      <ElectionAdminPage />
+    </AuthProvider>
   )
 }
