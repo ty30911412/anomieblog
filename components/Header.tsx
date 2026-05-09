@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Search } from 'lucide-react'
 import { AuthProvider } from '@/contexts/AuthContext'
 
 const HeaderInner: React.FC = () => {
@@ -85,6 +85,10 @@ const HeaderInner: React.FC = () => {
           )}
 
           <Link href="/about" className={getNavLinkStyle('/about')}>關於我</Link>
+
+          <Link href="/search" className={getNavLinkStyle('/search')} aria-label="搜尋">
+            <Search size={15} />
+          </Link>
 
           {currentUser && (
             <Link href="/admin" className={getNavLinkStyle('/admin', true)}>管理後台</Link>

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Clock, X } from 'lucide-react'
 import { BlogPost } from '@/types'
 
@@ -55,11 +56,13 @@ export default function HomePostGrid({ posts }: Props) {
             className="lg:col-start-1 lg:col-end-10 lg:row-start-1 w-full h-full overflow-hidden rounded-2xl block relative aspect-[16/9] lg:aspect-[16/10] shadow-md z-10"
           >
             <div className="absolute inset-0 bg-ink-900/0 group-hover:bg-ink-900/10 transition-colors duration-500 z-10" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={featuredPost.coverImage}
               alt={featuredPost.title}
-              className="w-full h-full object-cover transform transition-transform duration-1000 ease-out group-hover:scale-105"
+              fill
+              priority
+              className="object-cover transform transition-transform duration-1000 ease-out group-hover:scale-105"
+              sizes="(max-width: 1024px) 100vw, 75vw"
             />
           </Link>
           <div className="lg:col-start-8 lg:col-end-13 lg:row-start-1 flex flex-col justify-center space-y-6 lg:p-12 p-6 rounded-2xl z-20 transition-all duration-700 ease-out lg:group-hover:-translate-x-4 bg-white/80 group-hover:bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl shadow-ink-900/10">
@@ -97,12 +100,12 @@ export default function HomePostGrid({ posts }: Props) {
             <article key={post.id} className="group flex flex-col space-y-5">
               <Link href={`/post/${post.slug}`} className="block overflow-hidden rounded-xl aspect-[4/3] relative shadow-sm border border-ink-100/50">
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 z-10" />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={post.coverImage}
                   alt={post.title}
-                  className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
+                  fill
+                  className="object-cover transform transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </Link>
               <div className="space-y-3 transition-transform duration-500 group-hover:translate-x-2">

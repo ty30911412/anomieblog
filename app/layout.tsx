@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter, Noto_Serif_TC } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+
+const GA_ID = 'G-ST0GL2CCEJ'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,6 +48,19 @@ export default function RootLayout({
   return (
     <html lang="zh-TW" className={`${inter.variable} ${notoSerifTC.variable}`}>
       <body className="min-h-screen bg-paper text-ink-800 font-sans">
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}', { page_path: window.location.pathname });
+          `}
+        </Script>
         <Header />
         <main>
           {children}

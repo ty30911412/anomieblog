@@ -1,6 +1,7 @@
 import { adminDb } from '@/lib/firebase-admin'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { Calendar, Clock, Tag } from 'lucide-react'
 import { BlogPost } from '@/types'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
@@ -111,9 +112,13 @@ export default async function PostPage({ params }: Props) {
       {/* Hero */}
       <div className="relative h-[65vh] min-h-[400px] w-[100vw] left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden">
         {post.coverImage && (
-          <div
-            className="absolute inset-0 bg-cover bg-center z-0 hero-image"
-            style={{ backgroundImage: `url(${post.coverImage})` }}
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            priority
+            className="object-cover z-0"
+            sizes="100vw"
           />
         )}
         <div className="absolute inset-0 bg-ink-900/40 z-10" />
