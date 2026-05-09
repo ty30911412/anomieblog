@@ -30,6 +30,7 @@ function buildPrior(race: { id: string; candidates: { name: string; party: strin
   return result
 }
 import WinProbabilityBar from '@/components/election/WinProbabilityBar'
+import ModelBreakdown from '@/components/election/ModelBreakdown'
 import PollTrendChart from '@/components/election/PollTrendChart'
 import PollSourceTable from '@/components/election/PollSourceTable'
 import Link from 'next/link'
@@ -231,6 +232,15 @@ export default function ElectionPage() {
                     <p className="text-ink-300 text-sm">尚無民調資料</p>
                   )}
                 </div>
+
+                {/* 模型參數展開面板 */}
+                {agg && (
+                  <ModelBreakdown
+                    race={selectedRace}
+                    agg={agg}
+                    structuralPrior={buildPrior(selectedRace)}
+                  />
+                )}
 
                 {/* 趨勢圖 */}
                 <div className="bg-white border border-ink-200 rounded-2xl p-6 shadow-sm">
