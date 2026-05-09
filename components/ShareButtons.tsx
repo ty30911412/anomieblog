@@ -71,10 +71,11 @@ export default function ShareButtons({ title }: Props) {
           href={href()}
           target="_blank"
           rel="noopener noreferrer"
-          className={`flex items-center gap-2 px-4 py-2 rounded-full border border-ink-200 text-ink-500 text-sm font-bold transition-all duration-200 ${color}`}
+          title={label}
+          className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-full border border-ink-200 text-ink-500 text-sm font-bold transition-all duration-200 ${color}`}
         >
           {icon}
-          {label}
+          <span className="hidden sm:inline">{label}</span>
         </a>
       ))}
 
