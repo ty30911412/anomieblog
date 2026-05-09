@@ -6,7 +6,7 @@ import { collection, onSnapshot, deleteDoc, doc, query, orderBy } from 'firebase
 import { signOut } from 'firebase/auth'
 import { db, auth } from '@/lib/firebase'
 import { BlogPost } from '@/types'
-import { Edit, Trash2, Plus, FileText, LogOut, MessageSquare } from 'lucide-react'
+import { Edit, Trash2, Plus, FileText, LogOut, MessageSquare, BarChart2 } from 'lucide-react'
 import AdminRoute from '@/components/AdminRoute'
 import { AuthProvider } from '@/contexts/AuthContext'
 
@@ -57,6 +57,12 @@ function AdminDashboard() {
             className="flex items-center gap-2 px-4 py-2.5 border border-ink-200 text-ink-500 rounded-lg hover:bg-ink-50 transition-colors font-bold text-sm"
           >
             <MessageSquare size={16} /> 留言管理
+          </Link>
+          <Link
+            href="/admin/election"
+            className="flex items-center gap-2 px-4 py-2.5 border border-amber-300 text-amber-700 rounded-lg hover:bg-amber-50 transition-colors font-bold text-sm"
+          >
+            <BarChart2 size={16} /> 選舉數據
           </Link>
           <button
             onClick={() => signOut(auth)}

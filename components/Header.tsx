@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import { ArrowLeft, Search } from 'lucide-react'
+import { ArrowLeft, Search, BarChart2 } from 'lucide-react'
 import { AuthProvider } from '@/contexts/AuthContext'
 
 const HeaderInner: React.FC = () => {
@@ -85,6 +85,15 @@ const HeaderInner: React.FC = () => {
           )}
 
           <Link href="/about" className={getNavLinkStyle('/about')}>關於我</Link>
+
+          <Link
+            href="/election"
+            className={`${getNavLinkStyle('/election', true)} gap-1.5`}
+            title="2026 選舉民調追蹤"
+          >
+            <BarChart2 size={14} />
+            <span className="hidden sm:inline">選舉</span>
+          </Link>
 
           <Link href="/search" className={getNavLinkStyle('/search')} aria-label="搜尋">
             <Search size={15} />
