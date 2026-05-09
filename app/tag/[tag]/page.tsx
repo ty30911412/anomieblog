@@ -17,9 +17,10 @@ async function getPostsByTag(tag: string): Promise<BlogPost[]> {
   const snap = await adminDb
     .collection('posts')
     .where('tags', 'array-contains', tag)
-    .orderBy('date', 'desc')
     .get()
-  return snap.docs.map((d) => ({ id: d.id, slug: d.id, ...d.data() } as BlogPost))
+  const posts = snap.docs.map((d) => ({ id: d.id, slug: d.id, ...d.data() } as BlogPost))
+  // 在 JS 排序，避免需要 Firestore 複合索引
+  return posts.sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
