@@ -7,9 +7,11 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import LikeButton from '@/components/LikeButton'
 import Comments from '@/components/Comments'
 import ReadingProgress from '@/components/ReadingProgress'
+import ReadingMemory from '@/components/ReadingMemory'
 import TableOfContents from '@/components/TableOfContents'
 import ShareButtons from '@/components/ShareButtons'
 import ImageLightbox from '@/components/ImageLightbox'
+import RelatedPosts from '@/components/RelatedPosts'
 
 export const revalidate = 60
 
@@ -23,6 +25,22 @@ async function getPost(slug: string): Promise<BlogPost | null> {
   if (!docSnap.exists) return null
   const data = docSnap.data() as Omit<BlogPost, 'id' | 'slug'>
   return { id: docSnap.id, slug: docSnap.id, ...data }
+}
+
+async function getRelatedPosts(currentSlug: string, tags: string[]) {
+  if (!adminDb || tags.length === 0) return []
+  const snap = await adminDb.collection('posts').get()
+  const scored = snap.docs
+    .filter((d) => d.id !== currentSlug)
+    .map((d) => {
+      const data = d.data() as BlogPost
+      const overlap = (data.tags || []).filter((t) => tags.includes(t)).length
+      return { slug: d.id, ...data, overlap }
+    })
+    .filter((p) => p.overlap > 0)
+    .sort((a, b) => b.overlap - a.overlap || b.date?.localeCompare(a.date ?? '') )
+    .slice(0, 3)
+  return scored.map(({ overlap: _o, ...rest }) => rest)
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -47,11 +65,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://anomieblog.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://liam-note.vercel.app'
 
 export default async function PostPage({ params }: Props) {
   const post = await getPost(params.slug)
   if (!post) notFound()
+
+  const relatedPosts = await getRelatedPosts(params.slug, post.tags ?? [])
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -86,6 +106,7 @@ export default async function PostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ReadingProgress />
+      <ReadingMemory slug={post.slug} />
 
       {/* Hero */}
       <div className="relative h-[65vh] min-h-[400px] w-[100vw] left-1/2 -translate-x-1/2 flex items-center justify-center overflow-hidden">
@@ -107,48 +128,42 @@ export default async function PostPage({ params }: Props) {
         </div>
       </div>
 
-      {/* 左側浮動目錄（不佔版面空間，xl 1280px+ 才顯示） */}
       <TableOfContents content={post.content} />
 
-      {/*
-        xl 螢幕：外層 pl-36（144px）替 TOC 預留空間，
-        內層 max-w-3xl mx-auto 在「剩餘寬度」裡自動置中。
-        例：1440px 螢幕 → 剩餘 1296px → 文章置中於 1296px 內
-        TOC 寬 208px，浮動且自動收起，短暫展開時略有重疊不影響閱讀。
-      */}
       <div className="xl:pl-20">
-      <div className="max-w-3xl mx-auto px-6 mt-16 md:mt-24 pb-20 md:pb-32">
-        <ImageLightbox>
-          <MarkdownRenderer content={post.content} />
-        </ImageLightbox>
+        <div className="max-w-3xl mx-auto px-6 mt-16 md:mt-24 pb-20 md:pb-32">
+          <ImageLightbox>
+            <MarkdownRenderer content={post.content} />
+          </ImageLightbox>
 
-        {/* 標籤 + 喜歡 + 分享 */}
-        <div className="border-t border-ink-200/60 pt-10 mt-16 space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="flex items-center gap-1 px-3 py-1 bg-ink-100 text-ink-600 rounded-full text-xs font-bold hover:bg-ink-200 transition-colors cursor-default"
-                >
-                  <Tag size={12} />{tag}
-                </span>
-              ))}
+          {/* 標籤 + 喜歡 + 分享 */}
+          <div className="border-t border-ink-200/60 pt-10 mt-16 space-y-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="flex items-center gap-1 px-3 py-1 bg-ink-100 text-ink-600 rounded-full text-xs font-bold hover:bg-ink-200 transition-colors cursor-default"
+                  >
+                    <Tag size={12} />{tag}
+                  </span>
+                ))}
+              </div>
+              <LikeButton slug={post.slug} initialLikes={post.initialLikes ?? 0} />
             </div>
-            <LikeButton slug={post.slug} initialLikes={post.initialLikes ?? 0} />
+            <ShareButtons title={post.title} />
           </div>
 
-          {/* 分享按鈕 */}
-          <ShareButtons title={post.title} />
-        </div>
+          {/* 相關文章 */}
+          <RelatedPosts posts={relatedPosts} />
 
-        {/* 留言 */}
-        <div className="mt-16">
-          <h2 className="font-serif text-2xl font-bold text-ink-900 mb-6">留言討論</h2>
-          <Comments slug={post.slug} />
+          {/* 留言 */}
+          <div className="mt-16">
+            <h2 className="font-serif text-2xl font-bold text-ink-900 mb-6">留言討論</h2>
+            <Comments slug={post.slug} />
+          </div>
         </div>
       </div>
-      </div> {/* xl:pl-36 wrapper */}
     </article>
   )
 }
