@@ -5,7 +5,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://anomieblog.vercel.
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: '*', allow: '/', disallow: ['/admin', '/login'] },
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/login'],
+      },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
   }
