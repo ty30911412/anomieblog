@@ -229,10 +229,23 @@ const POLLS = [
   },
 ]
 
+/**
+ * 產生 deterministic poll ID：raceId + source + date → slug
+ * 相同民調重複執行 seed 會覆蓋而不是新增，避免重複資料
+ */
+function pollId(poll) {
+  return `${poll.raceId}_${poll.source}_${poll.date}`
+    .toLowerCase()
+    .replace(/[\s（）()【】「」、，。：:\/]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80)
+}
+
 async function seed() {
   console.log('🗳️  開始寫入選舉資料...\n')
 
-  // 寫入選區
+  // 寫入選區（用固定 id，重跑安全）
   for (const race of RACES) {
     const { id, ...data } = race
     await db.collection('electionRaces').doc(id).set(data)
@@ -241,11 +254,19 @@ async function seed() {
 
   console.log('')
 
-  // 寫入民調
+  // 清除既有民調，避免舊資料殘留（可選：改成 upsert 請刪除此段）
+  console.log('🧹 清除既有民調資料...')
+  const existing = await db.collection('electionPolls').get()
+  const deleteOps = existing.docs.map((d) => d.ref.delete())
+  await Promise.all(deleteOps)
+  console.log(`   已刪除 ${existing.size} 筆舊資料\n`)
+
+  // 寫入民調（用 deterministic id，重跑安全）
   for (const poll of POLLS) {
-    const ref = await db.collection('electionPolls').add(poll)
+    const id = pollId(poll)
+    await db.collection('electionPolls').doc(id).set(poll)
     const race = RACES.find((r) => r.id === poll.raceId)
-    console.log(`✓ 民調：${race?.city} ｜ ${poll.source} ｜ ${poll.date} (${ref.id})`)
+    console.log(`✓ 民調：${race?.city} ｜ ${poll.source} ｜ ${poll.date} (${id})`)
   }
 
   console.log('\n✅ 完成！共寫入', RACES.length, '個選區、', POLLS.length, '筆民調。')
