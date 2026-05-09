@@ -19,10 +19,10 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
   return (
     <div className="space-y-5">
       {/* 未表態提示 */}
-      <div className="flex items-center justify-between text-[11px]">
-        <span className="text-ink-400">
-          民調明確表態比例：<span className="font-mono font-bold text-ink-600">{declaredTotal}%</span>
-          <span className="text-ink-300 ml-2">（未表態 {undecided}% 中，60% 按比例分配給各候選人、40% 歸棄票或小黨）</span>
+      <div className="flex items-center justify-between text-xs">
+        <span className="text-ink-500">
+          民調明確表態比例：<span className="font-mono font-bold text-ink-700">{declaredTotal}%</span>
+          <span className="text-ink-400 ml-2">（未表態 {undecided}% 中，60% 按比例分配給各候選人、40% 歸棄票或小黨）</span>
         </span>
       </div>
 
@@ -54,7 +54,7 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
                   <span className="font-mono font-bold text-lg" style={{ color: c.color }}>
                     {proj}%
                   </span>
-                  <span className="text-ink-300 font-mono text-xs ml-1.5">
+                  <span className="text-ink-400 font-mono text-xs ml-1.5">
                     {ci[0]}–{ci[1]}%
                   </span>
                 </div>
@@ -91,10 +91,10 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
               </div>
 
               {/* 次要數字：民調調整前後 */}
-              <div className="flex gap-4 text-[10px] text-ink-400 font-mono pl-4">
-                <span>加權平均支持率 {agg.avgPct[c.name] ?? 0}%</span>
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-ink-500 font-mono pl-4">
+                <span>加權平均支持率 <span className="text-ink-700 font-bold">{agg.avgPct[c.name] ?? 0}%</span></span>
                 <span className="text-ink-300">→</span>
-                <span>分配未表態後 {pollAdj}%</span>
+                <span>分配未表態後 <span className="text-ink-700 font-bold">{pollAdj}%</span></span>
                 <span className="text-ink-300">→</span>
                 <span>混合歷史選民結構 <strong style={{ color: c.color }}>{proj}%</strong></span>
               </div>
@@ -104,10 +104,10 @@ export default function VoteShareForecast({ candidates, agg }: Props) {
       </div>
 
       {/* 說明 */}
-      <div className="text-[10px] text-ink-300 border-t border-ink-100 pt-3 space-y-0.5">
+      <div className="text-xs text-ink-400 border-t border-ink-100 pt-3 space-y-1">
         <p>橫條淡色部分為 90% 預測區間，反映各機構民調的分歧程度及歷史選民結構轉移風險。</p>
         <p>得票率 ≠ 勝率：兩候選人預測得票率加總不等於 100%，差值為棄票、小黨支持及無效票估算。</p>
-        <p>學術參考：Jennings & Wlezien (2016), Yu & Lim (2021), Abramowitz (2012)。</p>
+        <p className="text-ink-300">學術參考：Jennings & Wlezien (2016), Yu & Lim (2021), Abramowitz (2012)。</p>
       </div>
     </div>
   )

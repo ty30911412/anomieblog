@@ -105,14 +105,14 @@ export default function WinProbabilityBar({
                 )}
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 {/* 加權平均支持率 */}
                 <div className="flex justify-between items-baseline">
-                  <span className="text-[10px] text-ink-400">加權平均支持率</span>
+                  <span className="text-xs text-ink-500">加權平均支持率</span>
                   <div className="text-right">
                     <span className="font-mono font-bold text-ink-700 text-sm">{avgPct[c.name] ?? 0}%</span>
                     {!compact && u !== undefined && (
-                      <span className="text-[10px] text-ink-300 font-mono ml-1">±{u}pp</span>
+                      <span className="text-xs text-ink-400 font-mono ml-1">±{u}pp</span>
                     )}
                   </div>
                 </div>
@@ -140,13 +140,13 @@ export default function WinProbabilityBar({
 
                 {!compact && (
                   <div className="flex justify-between items-baseline">
-                    <span className="text-[10px] text-ink-400">民調相對勝率</span>
-                    <span className="font-mono text-ink-500 text-xs">{winProb[c.name] ?? 0}%</span>
+                    <span className="text-xs text-ink-500">民調相對勝率</span>
+                    <span className="font-mono text-ink-600 text-xs">{winProb[c.name] ?? 0}%</span>
                   </div>
                 )}
 
                 <div className="flex justify-between items-baseline">
-                  <span className="text-[10px] text-ink-400">模型預測勝率</span>
+                  <span className="text-xs font-medium text-ink-700">模型預測勝率</span>
                   <span className="font-mono font-bold text-sm" style={{ color: c.color }}>
                     {predictedProb[c.name] ?? 0}%
                   </span>
@@ -154,8 +154,8 @@ export default function WinProbabilityBar({
 
                 {!compact && ci && (
                   <div className="flex justify-between items-baseline">
-                    <span className="text-[10px] text-ink-300">95% 信賴區間</span>
-                    <span className="font-mono text-[10px] text-ink-300">{ci[0]}–{ci[1]}%</span>
+                    <span className="text-xs text-ink-400">95% 信賴區間</span>
+                    <span className="font-mono text-xs text-ink-500">{ci[0]}–{ci[1]}%</span>
                   </div>
                 )}
               </div>
