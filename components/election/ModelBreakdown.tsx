@@ -316,21 +316,31 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
           {/* ── House Weight 說明 ── */}
           <section>
             <p className="text-[10px] font-bold text-ink-400 uppercase tracking-widest mb-2">
-              本選區使用民調機構權重
+              民調機構權重（基於歷史準確率驗證）
             </p>
             <div className="flex flex-wrap gap-2">
-              {(agg.pollCount > 0
-                ? ['TVBS（×2.0）', '美麗島（×1.0）', '山水（×1.0）', 'ETtoday（×1.0）', '其他（×0.8）']
-                : []
-              ).map((label) => (
-                <span key={label} className="text-[10px] font-mono px-2 py-1 bg-ink-100 text-ink-500 rounded-lg">
-                  {label}
-                </span>
+              {[
+                { label: '聯合報',   w: '×1.8', note: '2024最準 0.52%' },
+                { label: 'TVBS',    w: '×1.5', note: '2024次準 3.61%' },
+                { label: '菱傳媒',  w: '×1.2', note: '2022地方最準' },
+                { label: '美麗島',  w: '×1.0', note: '中性' },
+                { label: 'ETtoday', w: '×1.0', note: '中性' },
+                { label: '山水',    w: '×1.0', note: '中性' },
+                { label: '趨勢民調',w: '×0.9', note: '規模較小' },
+                { label: '其他',    w: '×0.8', note: '預設' },
+              ].map(({ label, w, note }) => (
+                <div key={label} className="flex flex-col items-center text-center px-2.5 py-1.5 bg-ink-50 border border-ink-100 text-ink-600 rounded-lg">
+                  <span className="text-[10px] font-bold font-mono">{label}</span>
+                  <span className="text-[11px] font-mono font-bold text-amber-700">{w}</span>
+                  <span className="text-[9px] text-ink-300">{note}</span>
+                </div>
               ))}
             </div>
-            <p className="text-[10px] text-ink-300 mt-2">
-              時間衰減：w = √(n/1000) × e^(−d/21) × house_weight
-            </p>
+            <div className="mt-3 space-y-0.5 text-[10px] text-ink-300">
+              <p>加法偏差修正：三立 / 自由時報 DPP +2pp（2022 驗證）；其他機構暫設 0。</p>
+              <p>完整公式：w = √(n/1000) × e^(−d/21) × house_weight，並對民調數字套用加法偏差。</p>
+              <p className="text-amber-600">校準來源：tstm.tw 選後民調大檢驗（2024）、vocus.cc 2022縣市長民調驗證。</p>
+            </div>
           </section>
 
         </div>
