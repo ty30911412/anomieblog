@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { doc, updateDoc, increment } from 'firebase/firestore'
+import { doc, updateDoc, increment, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { ThumbsUp } from 'lucide-react'
 
@@ -14,21 +14,30 @@ export default function LikeButton({ slug, initialLikes }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes)
   const [hasLiked, setHasLiked] = useState(false)
 
+  // 從 localStorage 還原按讚狀態
   useEffect(() => {
-    const liked = localStorage.getItem(`liked_${slug}`)
-    if (liked === 'true') setHasLiked(true)
+    if (localStorage.getItem(`liked_${slug}`) === 'true') setHasLiked(true)
   }, [slug])
+
+  // 即時監聽 Firestore 的真實按讚數
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'posts', slug), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data()
+        setLikes(data.likes ?? data.initialLikes ?? initialLikes)
+      }
+    })
+    return unsub
+  }, [slug, initialLikes])
 
   const handleLike = async () => {
     if (hasLiked) return
-    const newLikes = likes + 1
-    setLikes(newLikes)
-    setHasLiked(true)
-    localStorage.setItem(`liked_${slug}`, 'true')
+    setHasLiked(true) // 樂觀 UI
     try {
       await updateDoc(doc(db, 'posts', slug), { likes: increment(1) })
+      localStorage.setItem(`liked_${slug}`, 'true') // 確認寫入成功後才儲存
     } catch {
-      // 靜默失敗
+      setHasLiked(false) // 失敗則回滾
     }
   }
 
