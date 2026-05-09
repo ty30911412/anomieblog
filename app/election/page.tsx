@@ -8,13 +8,26 @@ import { aggregatePolls, buildTrendData, pollUncertainty } from '@/lib/pollAggre
 
 // 2022 縣市長得票率作為選民結構基準（藍綠對決格局）
 // 資料來源：中選會 2022 年選舉結果
-const STRUCTURAL_PRIOR: Record<string, Record<string, number>> = {
-  'taipei':     { '蔣萬安': 62.0, '陳時中': 31.8 },   // 蔣62 vs 陳31
-  'new-taipei': { '侯友宜': 69.9, '林佳龍': 25.5 },   // 侯70 vs 林25（以2022格局推估新候選人基準）
-  'taoyuan':    { '張善政': 54.8, '鄭運鵬': 38.2 },   // 張55 vs 鄭38
-  'taichung':   { '盧秀燕': 58.5, '蔡其昌': 36.5 },   // 盧59 vs 蔡37（接班人基準）
-  'tainan':     { '謝龍介': 36.6, '黃偉哲': 59.8 },   // 謝37 vs 黃60（接班人基準）
-  'kaohsiung':  { '柯志恩': 37.3, '陳其邁': 59.9 },   // 柯37 vs 陳60（接班人基準）
+// ⚠ 以政黨為 key（KMT / DPP），避免候選人換人時 lookup 失敗
+const STRUCTURAL_PRIOR_BY_PARTY: Record<string, { KMT: number; DPP: number }> = {
+  'taipei':     { KMT: 62.0, DPP: 31.8 },  // 蔣62 vs 陳31
+  'new-taipei': { KMT: 69.9, DPP: 25.5 },  // 侯70 vs 林25
+  'taoyuan':    { KMT: 54.8, DPP: 38.2 },  // 張55 vs 鄭38
+  'taichung':   { KMT: 58.5, DPP: 36.5 },  // 盧59 vs 蔡37
+  'tainan':     { KMT: 36.6, DPP: 59.8 },  // 謝37 vs 黃60
+  'kaohsiung':  { KMT: 37.3, DPP: 59.9 },  // 柯37 vs 陳60
+}
+
+/** 將政黨先驗對應到當前候選人姓名，解決換人後 lookup 失敗問題 */
+function buildPrior(race: { id: string; candidates: { name: string; party: string }[] }) {
+  const partyPrior = STRUCTURAL_PRIOR_BY_PARTY[race.id]
+  if (!partyPrior) return undefined
+  const result: Record<string, number> = {}
+  race.candidates.forEach((c) => {
+    const isKMT = c.party.includes('國民黨') || c.party === 'KMT'
+    result[c.name] = isKMT ? partyPrior.KMT : partyPrior.DPP
+  })
+  return result
 }
 import WinProbabilityBar from '@/components/election/WinProbabilityBar'
 import PollTrendChart from '@/components/election/PollTrendChart'
@@ -79,7 +92,7 @@ export default function ElectionPage() {
       ? aggregatePolls(
           selectedPolls,
           selectedRace.candidates,
-          STRUCTURAL_PRIOR[selectedRace.id],
+          buildPrior(selectedRace),
           selectedRace.electionDate,
         )
       : null,
@@ -140,7 +153,7 @@ export default function ElectionPage() {
                   <div className="flex flex-row lg:flex-col gap-1.5 flex-wrap">
                     {regionRaces.map((race) => {
                       const racePolls = polls.filter((p) => p.raceId === race.id)
-                      const raceAgg = aggregatePolls(racePolls, race.candidates, STRUCTURAL_PRIOR[race.id], race.electionDate)
+                      const raceAgg = aggregatePolls(racePolls, race.candidates, buildPrior(race), race.electionDate)
                       const leader = raceAgg?.leader
                       const isSelected = selectedId === race.id
 
