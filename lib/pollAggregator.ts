@@ -88,8 +88,15 @@ function partyLabel(party: string): 'KMT' | 'DPP' {
   return 'DPP'
 }
 
-// ── α 計算：Linzer (2013) 時間函數 + 民調數量 ──────────────────────────────
-// α 決定最終預測中「民調」vs「結構先驗」的比重，兩因子取最大值
+// ── α 計算：Linzer (2013) 時間函數 × 民調覆蓋因子 ────────────────────────
+// α 決定最終預測中「民調」vs「結構先驗」的比重
+//
+// 公式：α = timeFactor × pollCoverageFactor（乘積，非取最大值）
+//
+// 理由：兩個因子應該是「且」關係而非「或」關係：
+//   - 距選舉很遠時，即使有很多民調，每筆民調的預測力都低（volatility 高）
+//   - 民調很少時，即使距選舉近，單一民調的雜訊大，不宜過度信任
+//   - 乘積能同時懲罰「遠期少量民調」的過度樂觀
 //
 // timeFactor：logistic 曲線，以選前 90 天為基準點（0.5）
 //   200 天前 ≈ 0.02  →  幾乎全靠結構先驗
@@ -97,22 +104,37 @@ function partyLabel(party: string): 'KMT' | 'DPP' {
 //    30 天前 ≈ 0.88  →  強烈依賴民調
 //     0 天   = 1.00  →  完全依賴民調
 //
-// pollFactor：min(1, polls/6)，6 筆以上民調時完全信任民調
+// pollCoverageFactor：min(1, pollCount/3)，3 筆以上達到飽和
+//   1 筆：33%  →  民調覆蓋不足，保守信任
+//   2 筆：67%  →  基本覆蓋
+//   3 筆以上：100%
+//
+// 範例：
+//   200天 + 2筆: 0.02 × 0.67 ≈ 1%  (幾乎全靠先驗) ✓
+//    90天 + 2筆: 0.50 × 0.67 ≈ 33%
+//    30天 + 4筆: 0.88 × 1.00 ≈ 88%
 function computeAlpha(pollCount: number, electionDate: string): number {
   const daysToElection = Math.max(
     0,
     (new Date(electionDate).getTime() - Date.now()) / 86400000
   )
-  const pollFactor = Math.min(1, pollCount / 6)
+  const pollCoverageFactor = Math.min(1, pollCount / 3)
   const timeFactor = daysToElection === 0
     ? 1.0
     : 1 / (1 + Math.exp((daysToElection - 90) / 30))
-  return Math.min(1, Math.max(pollFactor, timeFactor))
+  return Math.min(1, timeFactor * pollCoverageFactor)
 }
 
 // ── 不確定性計算 ─────────────────────────────────────────────────────────────
 // 若近 90 天民調 < 2 筆：以抽樣誤差估算（n=1000 預設）
 // 若近 90 天民調 ≥ 2 筆：機構間標準差（反映民調分歧程度）
+//
+// ⚠ 設下限 3.0pp：
+//   台灣縣市長民調歷史 MAE ≈ 3–5pp（2018/2022 實證）
+//   即使所有民調完全一致，模型不確定性仍然存在
+//   → 防止假性精準（民調聚合後 CI 過窄）
+const UNCERTAINTY_FLOOR = 3.0
+
 function computeUncertainty(
   polls: ElectionPoll[],
   candidateName: string,
@@ -123,15 +145,19 @@ function computeUncertainty(
     .map((p) => p.results.find((r) => r.name === candidateName)?.percentage)
     .filter((v): v is number => v !== undefined)
 
+  let u: number
   if (recent.length < 2) {
     // 抽樣誤差：95% CI 半寬 = √(p(1-p)/n) × 1.96，n=1000
     const p = Math.min(Math.max((avgPct ?? 40) / 100, 0.01), 0.99)
-    return Math.round(Math.sqrt((p * (1 - p)) / 1000) * 196) / 10
+    u = Math.round(Math.sqrt((p * (1 - p)) / 1000) * 196) / 10
+  } else {
+    const mean = recent.reduce((a, b) => a + b, 0) / recent.length
+    const variance = recent.reduce((a, b) => a + (b - mean) ** 2, 0) / recent.length
+    u = Math.round(Math.sqrt(variance) * 10) / 10
   }
 
-  const mean = recent.reduce((a, b) => a + b, 0) / recent.length
-  const variance = recent.reduce((a, b) => a + (b - mean) ** 2, 0) / recent.length
-  return Math.round(Math.sqrt(variance) * 10) / 10
+  // 套用下限：不確定性不得低於歷史 MAE 下限
+  return Math.max(u, UNCERTAINTY_FLOOR)
 }
 
 // ── 主要匯出介面 ─────────────────────────────────────────────────────────────

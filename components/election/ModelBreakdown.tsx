@@ -34,11 +34,11 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
   const daysToElection = agg.daysToElection
   const alpha = agg.pollWeight
 
-  // 還原 timeFactor 與 pollFactor（與 pollAggregator 邏輯一致）
+  // 還原 timeFactor 與 pollCoverageFactor（與 pollAggregator 邏輯一致）
   const timeFactor = daysToElection === 0
     ? 1.0
     : 1 / (1 + Math.exp((daysToElection - 90) / 30))
-  const pollFactor = Math.min(1, agg.pollCount / 6)
+  const pollCoverageFactor = Math.min(1, agg.pollCount / 3)
 
   // 先驗正規化值
   const priorTotal = structuralPrior
@@ -98,7 +98,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
             <div className="grid grid-cols-3 gap-3">
               {/* 時間因子 */}
               <div className="bg-ink-50 rounded-xl p-3">
-                <p className="text-xs text-ink-400 mb-1">時間因子</p>
+                <p className="text-xs text-ink-500 mb-1">時間因子</p>
                 <p className="font-mono font-bold text-ink-800 text-lg">
                   {Math.round(timeFactor * 100)}%
                 </p>
@@ -113,26 +113,26 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                 </div>
               </div>
 
-              {/* 民調數量因子 */}
+              {/* 民調覆蓋因子 */}
               <div className="bg-ink-50 rounded-xl p-3">
-                <p className="text-xs text-ink-400 mb-1">民調筆數因子</p>
+                <p className="text-xs text-ink-500 mb-1">民調覆蓋因子</p>
                 <p className="font-mono font-bold text-ink-800 text-lg">
-                  {Math.round(pollFactor * 100)}%
+                  {Math.round(pollCoverageFactor * 100)}%
                 </p>
                 <p className="text-xs text-ink-400 mt-1">
-                  {agg.pollCount} 筆 ÷ 基準 6 筆
+                  {agg.pollCount} 筆 ÷ 飽和值 3 筆
                 </p>
                 <div className="mt-2 h-1 bg-ink-200 rounded-full">
                   <div
                     className="h-1 bg-amber-400 rounded-full transition-all"
-                    style={{ width: `${Math.round(pollFactor * 100)}%` }}
+                    style={{ width: `${Math.round(pollCoverageFactor * 100)}%` }}
                   />
                 </div>
               </div>
 
               {/* 最終 α */}
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                <p className="text-xs text-amber-700 mb-1 font-bold">最終 α（取最大值）</p>
+                <p className="text-xs text-amber-700 mb-1 font-bold">最終 α（乘積）</p>
                 <p className="font-mono font-bold text-amber-800 text-lg">
                   {Math.round(alpha * 100)}%
                 </p>
@@ -147,19 +147,25 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                 </div>
               </div>
             </div>
-            <p className="text-xs text-ink-400 mt-2 font-mono">
-              α = max(時間因子, 民調因子) = max({Math.round(timeFactor * 100)}%, {Math.round(pollFactor * 100)}%) = {Math.round(alpha * 100)}%
+            <p className="text-xs text-ink-500 mt-2 font-mono">
+              α = 時間因子 × 民調覆蓋因子 = {Math.round(timeFactor * 100)}% × {Math.round(pollCoverageFactor * 100)}% = {Math.round(alpha * 100)}%
             </p>
             <p className="text-xs text-ink-400 font-mono">
-              時間因子 = 1 / (1 + e^((d−90)/30))，d={daysToElection}
+              時間因子 = 1 / (1 + e^((d−90)/30))，d={daysToElection}；民調覆蓋因子 = min(1, n/3)
+            </p>
+            <p className="text-xs text-ink-400 mt-1">
+              乘積設計：距選舉遠時即使民調多、預測力仍低；民調少時即使近選舉、雜訊仍大——兩者同時滿足才信任民調。
             </p>
           </section>
 
-          {/* ── 2022 選民結構基準 ── */}
+          {/* ── 混合先驗 ── */}
           {structuralPrior && (
             <section>
-              <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-3">
-                2022 選民結構基準（先驗）
+              <p className="text-xs font-bold text-ink-400 uppercase tracking-widest mb-1">
+                選民結構先驗（混合基準）
+              </p>
+              <p className="text-xs text-ink-400 mb-3">
+                40% × 2022縣市長兩黨比 + 60% × 2024總統兩黨比（排除民眾黨）
               </p>
               <div className="space-y-2">
                 {race.candidates.map((c) => {
@@ -283,7 +289,7 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
               得票率預測公式
             </p>
             <p className="text-xs font-mono text-ink-500 mb-2">
-              得票率 = α × (民調均值 + 未表態×60%分配) + (1−α) × (2022得票率 + 現任者效應)
+              得票率 = α × (民調均值 + 未表態×60%分配) + (1−α) × (混合先驗 + 現任者效應)
             </p>
             <div className="space-y-1.5">
               {race.candidates.map((c) => {

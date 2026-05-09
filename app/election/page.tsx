@@ -6,16 +6,30 @@ import { db } from '@/lib/firebase'
 import { ElectionRace, ElectionPoll, BlogPost } from '@/types'
 import { aggregatePolls, buildTrendData, pollUncertainty } from '@/lib/pollAggregator'
 
-// 2022 縣市長得票率作為選民結構基準（藍綠對決格局）
-// 資料來源：中選會 2022 年選舉結果
-// ⚠ 以政黨為 key（KMT / DPP），避免候選人換人時 lookup 失敗
+// 混合先驗：40% × 2022縣市長兩黨比 + 60% × 2024總統兩黨比
+//
+// 設計邏輯：
+//   - 2022 縣市長：反映「地方選舉結構」（候選人因素、地方派系）
+//   - 2024 總統：反映「當前全國政治氛圍」（更近期、更能捕捉選民結構移動）
+//   - 60% 偏重 2024，因為距 2026 僅 2 年，政治環境更接近
+//
+// 2022 來源：中選會第19任縣市長選舉（兩黨比 = KMT/(KMT+DPP)×100）
+// 2024 來源：中選會第16任總統選舉各縣市得票數（兩黨比，排除民眾黨柯文哲）
+//
+// ⚠ 值為「兩黨相對比」，KMT+DPP=100。
+//   正規化在 aggregatePolls() 內完成，此處只有比例重要。
+//
+// 計算示例（台北）：
+//   2022兩黨比: KMT=62/(62+31.8)=66.1%, DPP=33.9%
+//   2024兩黨比: KMT=587258/(587258+587899)=50.0%, DPP=50.0%
+//   混合: KMT=0.4×66.1+0.6×50.0=56.4%, DPP=43.6%
 const STRUCTURAL_PRIOR_BY_PARTY: Record<string, { KMT: number; DPP: number }> = {
-  'taipei':     { KMT: 62.0, DPP: 31.8 },  // 蔣62 vs 陳31
-  'new-taipei': { KMT: 69.9, DPP: 25.5 },  // 侯70 vs 林25
-  'taoyuan':    { KMT: 54.8, DPP: 38.2 },  // 張55 vs 鄭38
-  'taichung':   { KMT: 58.5, DPP: 36.5 },  // 盧59 vs 蔡37
-  'tainan':     { KMT: 36.6, DPP: 59.8 },  // 謝37 vs 黃60
-  'kaohsiung':  { KMT: 37.3, DPP: 59.9 },  // 柯37 vs 陳60
+  'taipei':     { KMT: 56.4, DPP: 43.6 },  // 2022(KMT 66%/DPP 34%)×40% + 2024(KMT 50%/DPP 50%)×60%
+  'new-taipei': { KMT: 57.9, DPP: 42.1 },  // 2022(KMT 73%/DPP 27%)×40% + 2024(KMT 48%/DPP 52%)×60%
+  'taoyuan':    { KMT: 53.1, DPP: 46.9 },  // 2022(KMT 59%/DPP 41%)×40% + 2024(KMT 49%/DPP 51%)×60%
+  'taichung':   { KMT: 52.4, DPP: 47.6 },  // 2022(KMT 62%/DPP 38%)×40% + 2024(KMT 46%/DPP 54%)×60%
+  'tainan':     { KMT: 35.3, DPP: 64.7 },  // 2022(KMT 38%/DPP 62%)×40% + 2024(KMT 33%/DPP 67%)×60%
+  'kaohsiung':  { KMT: 37.8, DPP: 62.2 },  // 2022(KMT 38%/DPP 62%)×40% + 2024(KMT 37%/DPP 63%)×60%
 }
 
 /** 將政黨先驗對應到當前候選人姓名，解決換人後 lookup 失敗問題 */
@@ -320,11 +334,20 @@ export default function ElectionPage() {
       )}
 
       {/* 方法論 */}
-      <div className="mt-16 pt-8 border-t border-ink-200/60 text-xs text-ink-400 max-w-2xl space-y-1">
+      <div className="mt-16 pt-8 border-t border-ink-200/60 text-xs text-ink-400 max-w-2xl space-y-1.5">
         <p className="font-bold text-ink-500">方法論說明</p>
         <p>
-          各民調以 <code className="bg-ink-100 px-1 rounded">w = √(n/1000) × e^(-d/21)</code> 加權（n：樣本數，d：距今天數），
-          各候選人加權平均後正規化為相對勝率。數值僅反映民調聚合結果，不代表最終選舉預測。
+          各民調以 <code className="bg-ink-100 px-1 rounded">w = √(n/1000) × e^(−d/21) × house_weight</code> 加權
+          （n：樣本數，d：距今天數），並對有系統偏差的機構套用加法修正。
+        </p>
+        <p>
+          最終預測為民調聚合與結構先驗的加權混合：
+          <code className="bg-ink-100 px-1 rounded mx-1">α × 民調勝率 + (1−α) × 先驗</code>，
+          其中 <code className="bg-ink-100 px-1 rounded">α = 時間因子 × 民調覆蓋因子</code>。
+        </p>
+        <p>
+          結構先驗為 40%×2022縣市長兩黨比 + 60%×2024總統兩黨比（排除民眾黨）；
+          現任者效應依文獻調整（Yu &amp; Lim 2021）。數值僅供學術參考，不代表最終選舉預測。
         </p>
       </div>
     </div>
