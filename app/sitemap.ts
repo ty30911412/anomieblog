@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!adminDb) return staticPages
 
   const snap = await adminDb.collection('posts').orderBy('date', 'desc').get()
+
   const postPages: MetadataRoute.Sitemap = snap.docs.map((doc) => ({
     url: `${SITE_URL}/post/${doc.id}`,
     lastModified: new Date(doc.data().date as string),
@@ -19,5 +20,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  return [...staticPages, ...postPages]
+  // 收集所有不重複的 tag
+  const allTags = new Set<string>()
+  snap.docs.forEach((doc) => {
+    const tags: string[] = doc.data().tags ?? []
+    tags.forEach((t) => allTags.add(t))
+  })
+
+  const tagPages: MetadataRoute.Sitemap = Array.from(allTags).map((tag) => ({
+    url: `${SITE_URL}/tag/${encodeURIComponent(tag)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  }))
+
+  return [...staticPages, ...postPages, ...tagPages]
 }

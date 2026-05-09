@@ -11,6 +11,7 @@ export interface BlogPost {
   coverImage: string;
   initialLikes: number;
   likes?: number;
+  views?: number;
 }
 
 export interface Comment {

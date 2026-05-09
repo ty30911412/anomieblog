@@ -2,10 +2,12 @@ import { adminDb } from '@/lib/firebase-admin'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Calendar, Clock, Tag } from 'lucide-react'
 import { BlogPost } from '@/types'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import LikeButton from '@/components/LikeButton'
+import ViewCounter from '@/components/ViewCounter'
 import Comments from '@/components/Comments'
 import ReadingProgress from '@/components/ReadingProgress'
 import ReadingMemory from '@/components/ReadingMemory'
@@ -126,6 +128,7 @@ export default async function PostPage({ params }: Props) {
           <div className="flex flex-wrap justify-center items-center gap-4 text-sm font-sans mb-6 opacity-90 tracking-wider uppercase">
             <div className="flex items-center gap-1.5"><Calendar size={14} /><span>{post.date}</span></div>
             <div className="flex items-center gap-1.5"><Clock size={14} /><span>{post.readTime}</span></div>
+            <ViewCounter slug={post.slug} initialViews={post.views ?? 0} className="text-sm" />
           </div>
           <h1 className="text-4xl md:text-6xl font-serif font-bold leading-tight tracking-tight drop-shadow-sm">
             {post.title}
@@ -146,12 +149,13 @@ export default async function PostPage({ params }: Props) {
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <span
+                  <Link
                     key={tag}
-                    className="flex items-center gap-1 px-3 py-1 bg-ink-100 text-ink-600 rounded-full text-xs font-bold hover:bg-ink-200 transition-colors cursor-default"
+                    href={`/tag/${encodeURIComponent(tag)}`}
+                    className="flex items-center gap-1 px-3 py-1 bg-ink-100 text-ink-600 rounded-full text-xs font-bold hover:bg-amber-100 hover:text-amber-800 transition-colors"
                   >
                     <Tag size={12} />{tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
               <LikeButton slug={post.slug} initialLikes={post.initialLikes ?? 0} />
