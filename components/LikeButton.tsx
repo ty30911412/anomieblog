@@ -32,12 +32,14 @@ export default function LikeButton({ slug, initialLikes }: LikeButtonProps) {
 
   const handleLike = async () => {
     if (hasLiked) return
-    setHasLiked(true) // 樂觀 UI
+    setHasLiked(true)
+    setLikes((n) => n + 1) // 樂觀更新計數
     try {
       await updateDoc(doc(db, 'posts', slug), { likes: increment(1) })
       localStorage.setItem(`liked_${slug}`, 'true') // 確認寫入成功後才儲存
     } catch {
-      setHasLiked(false) // 失敗則回滾
+      setHasLiked(false)
+      setLikes((n) => n - 1) // 失敗則回滾
     }
   }
 
@@ -45,7 +47,7 @@ export default function LikeButton({ slug, initialLikes }: LikeButtonProps) {
     <button
       onClick={handleLike}
       disabled={hasLiked}
-      className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-bold shadow-sm hover:shadow-md ${
+      className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-bold shadow-sm hover:shadow-md whitespace-nowrap ${
         hasLiked
           ? 'bg-amber-100 text-amber-700 border border-amber-200 cursor-default'
           : 'bg-white text-ink-600 border border-ink-200 hover:border-amber-300 hover:text-amber-600'
