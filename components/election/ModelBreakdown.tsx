@@ -283,11 +283,10 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
               本選區使用民調機構權重
             </p>
             <div className="flex flex-wrap gap-2">
-              {[...new Set(
-                agg.pollCount > 0
-                  ? ['TVBS（×2.0）', '美麗島（×1.0）', '山水（×1.0）', 'ETtoday（×1.0）', '其他（×0.8）']
-                  : []
-              )].map((label) => (
+              {(agg.pollCount > 0
+                ? ['TVBS（×2.0）', '美麗島（×1.0）', '山水（×1.0）', 'ETtoday（×1.0）', '其他（×0.8）']
+                : []
+              ).map((label) => (
                 <span key={label} className="text-[10px] font-mono px-2 py-1 bg-ink-100 text-ink-500 rounded-lg">
                   {label}
                 </span>
