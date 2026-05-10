@@ -81,10 +81,10 @@ const HeaderInner: React.FC = () => {
               <ArrowLeft size={16} /> <span>返回列表</span>
             </Link>
           ) : (
-            <Link href="/" className={getNavLinkStyle('/')}>文章列表</Link>
+            <Link href="/" className={getNavLinkStyle('/', true)}>文章列表</Link>
           )}
 
-          <Link href="/about" className={getNavLinkStyle('/about')}>關於我</Link>
+          <Link href="/about" className={getNavLinkStyle('/about', true)}>關於我</Link>
 
           <Link
             href="/election"
