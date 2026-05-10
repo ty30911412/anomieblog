@@ -56,12 +56,12 @@ export default function PollTrendChart({ data, candidates }: Props) {
     )
   }
 
-  // 動態 Y 軸上限：資料最大值 + 8pp，最低 40，最高 100
-  const rawMax = Math.max(
-    ...data.flatMap((row) => candidates.map((c) => Number(row[c.name] ?? 0)))
-  )
+  // 動態 Y 軸範圍：避免上下空白浪費
+  const allValues = data.flatMap((row) => candidates.map((c) => Number(row[c.name] ?? 0))).filter(v => v > 0)
+  const rawMax = Math.max(...allValues)
+  const rawMin = Math.min(...allValues)
   const yMax = Math.min(100, Math.ceil((rawMax + 8) / 5) * 5)
-  const yMin = 0
+  const yMin = Math.max(0, Math.floor((rawMin - 8) / 5) * 5)
 
   return (
     <ResponsiveContainer width="100%" height={280}>

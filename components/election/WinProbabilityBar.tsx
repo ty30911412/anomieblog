@@ -29,7 +29,18 @@ export default function WinProbabilityBar({
     (predictedProb[a.name] ?? 0) >= (predictedProb[b.name] ?? 0) ? a : b
   )
 
+  // 領先差距（以模型預測勝率計算）
+  const sorted = [...candidates].sort((a, b) => (predictedProb[b.name] ?? 0) - (predictedProb[a.name] ?? 0))
+  const marginProb = candidates.length >= 2
+    ? Math.round(((predictedProb[sorted[0].name] ?? 0) - (predictedProb[sorted[1].name] ?? 0)) * 10) / 10
+    : 0
+  // 民調支持率差距（原始民調數字）
+  const marginPoll = candidates.length >= 2
+    ? Math.round(((avgPct[sorted[0].name] ?? 0) - (avgPct[sorted[1].name] ?? 0)) * 10) / 10
+    : 0
+
   const isDataSparse = pollWeight < 0.4
+  const isPriorDominated = pollWeight < 0.15
 
   return (
     <div className="space-y-4">
@@ -63,10 +74,45 @@ export default function WinProbabilityBar({
             </div>
           ))}
         </div>
-        {!compact && isDataSparse && (
-          <p className="text-[10px] text-amber-600 mt-1.5 flex items-center gap-1">
-            <span>⚠</span>
-            民調筆數不足，預測主要依賴 2022 選民結構先驗，不確定性較高
+
+        {/* 領先差距 */}
+        {!compact && marginProb > 0 && (
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center gap-1.5">
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: sorted[0].color }}
+              />
+              <span className="text-xs text-ink-600 font-medium">
+                {sorted[0].name} 領先
+              </span>
+              <span
+                className="text-xs font-mono font-bold"
+                style={{ color: sorted[0].color }}
+              >
+                +{marginProb}pp
+              </span>
+              <span className="text-xs text-ink-300">（勝率差）</span>
+            </div>
+            {marginPoll > 0 && (
+              <span className="text-xs text-ink-400 font-mono">
+                民調差距 +{marginPoll}pp
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* 先驗主導提示 */}
+        {!compact && isPriorDominated && (
+          <p className="text-xs text-sky-700 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2 mt-2 flex items-start gap-1.5">
+            <span className="shrink-0 mt-0.5">ℹ</span>
+            <span>距選舉尚遠且民調筆數不足（民調權重僅 {Math.round(pollWeight * 100)}%），預測目前主要依賴歷史選民結構，請勿過度解讀。</span>
+          </p>
+        )}
+        {!compact && !isPriorDominated && isDataSparse && (
+          <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-2 flex items-start gap-1.5">
+            <span className="shrink-0 mt-0.5">⚠</span>
+            <span>民調筆數偏少，預測不確定性較高。</span>
           </p>
         )}
       </div>

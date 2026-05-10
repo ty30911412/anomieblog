@@ -138,12 +138,12 @@ export default function ElectionPage() {
           2026 縣市長選舉民調
         </h1>
         <p className="text-ink-500 max-w-xl leading-relaxed text-sm">
-          整合各機構民調，以加權聚合方法估算相對勝率。數據僅供學術參考。
+          整合各機構民調，混合歷史選民結構先驗，以動態貝葉斯方法估算相對勝率與預測得票率。數據僅供學術參考。
         </p>
         <div className="flex items-start gap-2 mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 max-w-lg">
           <Info size={13} className="mt-0.5 shrink-0" />
           <span>
-            權重：樣本數開根號 × 時間衰減（半衰期 21 天）。勝率為加權民調聚合後正規化數值，非獨立預測模型。
+            預測 = α × 民調聚合 + (1−α) × 歷史選民結構，α 由距選舉天數與民調覆蓋率共同決定。距選舉尚早時先驗主導，預測數值偏保守。
           </span>
         </div>
       </div>
