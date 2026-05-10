@@ -18,7 +18,7 @@ export default async function HomePage() {
   const posts = await getPosts()
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 space-y-20">
+    <div className="max-w-6xl mx-auto px-6 py-12 space-y-20 animate-fade-in">
       {/* 引言 */}
       <div className="prose prose-stone max-w-3xl pt-16">
         <p className="text-xl md:text-2xl font-serif leading-relaxed text-ink-700 italic opacity-80">

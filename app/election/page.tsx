@@ -163,7 +163,7 @@ export default function ElectionPage() {
     .filter((g) => g.races.length > 0)
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 pt-28 min-h-screen">
+    <div className="max-w-6xl mx-auto px-6 py-12 pt-28 min-h-screen animate-fade-in">
       {/* 頁首 */}
       <div className="mb-10">
         <div className="flex items-center gap-2 text-xs font-bold text-amber-700 uppercase tracking-widest mb-3">
