@@ -165,7 +165,8 @@ export default function ModelBreakdown({ race, agg, structuralPrior }: Props) {
                 選民結構先驗（混合基準）
               </p>
               <p className="text-xs text-ink-400 mb-3">
-                40% × 2022縣市長兩黨比 + 60% × 2024總統兩黨比（排除民眾黨）
+                40% × 2022縣市長兩黨比 + 60% × 2024總統調整後兩黨比
+                <span className="ml-1 text-ink-300">（TPP票 65%→KMT、35%→DPP，依 NCCU ESC 後選調查）</span>
               </p>
               <div className="space-y-2">
                 {race.candidates.map((c) => {
