@@ -3,8 +3,15 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Clock, X } from 'lucide-react'
+import { ArrowRight, Clock, X, ChevronDown, ChevronUp } from 'lucide-react'
 import { BlogPost } from '@/types'
+
+const TAG_VISIBLE_COUNT = 10
+
+// 正規化標籤：統一繁體字形（台→臺 等常見異體字）
+function normalizeTag(tag: string): string {
+  return tag.replace(/台灣/g, '臺灣').replace(/台北/g, '臺北').replace(/台南/g, '臺南').replace(/台中/g, '臺中').replace(/台東/g, '臺東')
+}
 
 interface Props {
   posts: BlogPost[]
@@ -12,39 +19,60 @@ interface Props {
 
 export default function HomePostGrid({ posts }: Props) {
   const [activeTag, setActiveTag] = useState<string | null>(null)
+  const [tagsExpanded, setTagsExpanded] = useState(false)
 
-  // 收集所有 tag，依出現次數排序
+  // 收集所有 tag，正規化後去重，依出現次數排序
   const allTags = useMemo(() => {
     const counts: Record<string, number> = {}
-    posts.forEach((p) => p.tags.forEach((t) => { counts[t] = (counts[t] ?? 0) + 1 }))
+    posts.forEach((p) => p.tags.forEach((t) => {
+      const normalized = normalizeTag(t)
+      counts[normalized] = (counts[normalized] ?? 0) + 1
+    }))
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([t]) => t)
   }, [posts])
 
-  const filtered = activeTag ? posts.filter((p) => p.tags.includes(activeTag)) : posts
+  const visibleTags = tagsExpanded ? allTags : allTags.slice(0, TAG_VISIBLE_COUNT)
+  const hasMore = allTags.length > TAG_VISIBLE_COUNT
+
+  const filtered = activeTag ? posts.filter((p) => p.tags.some((t) => normalizeTag(t) === activeTag)) : posts
   const [featuredPost, ...recentPosts] = filtered
 
   return (
     <div className="space-y-20">
       {/* 標籤篩選列 */}
       {allTags.length > 0 && (
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-bold text-ink-400 uppercase tracking-widest mr-1">篩選</span>
-          {allTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => setActiveTag(activeTag === tag ? null : tag)}
-              className={`
-                flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200
-                ${activeTag === tag
-                  ? 'bg-ink-900 text-paper shadow-sm'
-                  : 'bg-ink-100/70 text-ink-500 hover:bg-ink-200 hover:text-ink-800'
-                }
-              `}
-            >
-              #{tag}
-              {activeTag === tag && <X size={10} className="ml-0.5" />}
-            </button>
-          ))}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-bold text-ink-400 uppercase tracking-widest mr-1">篩選</span>
+            {visibleTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                className={`
+                  flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200
+                  ${activeTag === tag
+                    ? 'bg-ink-900 text-paper shadow-sm'
+                    : 'bg-ink-100/70 text-ink-500 hover:bg-ink-200 hover:text-ink-800'
+                  }
+                `}
+              >
+                #{tag}
+                {activeTag === tag && <X size={10} className="ml-0.5" />}
+              </button>
+            ))}
+            {hasMore && (
+              <button
+                onClick={() => setTagsExpanded(!tagsExpanded)}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-ink-400 hover:text-ink-700 hover:bg-ink-100/70 transition-all duration-200 border border-dashed border-ink-200 hover:border-ink-400"
+              >
+                {tagsExpanded ? (
+                  <><ChevronUp size={11} />收起</>
+                ) : (
+                  <><ChevronDown size={11} />還有 {allTags.length - TAG_VISIBLE_COUNT} 個</>
+                )}
+              </button>
+            )}
+          </div>
         </div>
       )}
 
@@ -127,10 +155,10 @@ export default function HomePostGrid({ posts }: Props) {
                     {post.tags.slice(0, 2).map((tag) => (
                       <button
                         key={tag}
-                        onClick={() => setActiveTag(tag)}
+                        onClick={() => setActiveTag(normalizeTag(tag))}
                         className="text-xs font-sans text-ink-400 bg-ink-100/50 px-2 py-1 rounded hover:bg-ink-200 hover:text-ink-700 transition-colors"
                       >
-                        #{tag}
+                        #{normalizeTag(tag)}
                       </button>
                     ))}
                   </div>
