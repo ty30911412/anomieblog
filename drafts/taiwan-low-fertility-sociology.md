@@ -12,6 +12,30 @@
 
 ## 數字背後的故事
 
+<figure style="margin: 2rem 0">
+
+<svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="台灣總生育率 1984–2024 折線圖">
+  <title>台灣總生育率 1984–2024</title>
+  <line x1="60" y1="230" x2="560" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="52" y="234" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">0</text><line x1="60" y1="190" x2="560" y2="190" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="52" y="194" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">0.5</text><line x1="60" y1="150" x2="560" y2="150" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="52" y="154" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">1</text><line x1="60" y1="110" x2="560" y2="110" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="52" y="114" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">1.5</text><line x1="60" y1="70" x2="560" y2="70" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="52" y="74" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">2</text><line x1="60" y1="30" x2="560" y2="30" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="52" y="34" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">2.5</text>
+  <line x1="60" y1="230" x2="565" y2="230" stroke="#B4B2A9" stroke-width="1"/>
+  <line x1="60" y1="30" x2="60" y2="230" stroke="#B4B2A9" stroke-width="1"/>
+  <line x1="60" y1="61.99999999999997" x2="560" y2="61.99999999999997" stroke="#E24B4A" stroke-width="1" stroke-dasharray="5,4" opacity="0.7"/><text x="564" y="65.99999999999997" font-size="10" fill="#E24B4A" font-family="sans-serif">替換率 2.1</text>
+  <text x="60" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">1984</text><text x="135" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">1990</text><text x="197.5" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">1995</text><text x="260" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2000</text><text x="322.5" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2005</text><text x="385" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2010</text><text x="447.5" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2015</text><text x="510" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2020</text><text x="560" y="246" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2024</text>
+  <text x="20" y="130" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif" transform="rotate(-90,20,130)">總生育率（TFR）</text>
+  <polygon points="60.0,65.2 122.5,78.0 185.0,89.2 247.5,105.2 310.0,135.6 372.5,147.6 385.0,158.0 422.5,144.4 460.0,136.4 497.5,146.0 522.5,151.6 547.5,158.0 560.0,160.4 560,230 60,230" fill="#BA7517" opacity="0.1"/><polyline points="60.0,65.2 122.5,78.0 185.0,89.2 247.5,105.2 310.0,135.6 372.5,147.6 385.0,158.0 422.5,144.4 460.0,136.4 497.5,146.0 522.5,151.6 547.5,158.0 560.0,160.4" fill="none" stroke="#BA7517" stroke-width="2.5" stroke-linejoin="round"/><circle cx="60.0" cy="65.2" r="3.5" fill="#BA7517"/><circle cx="122.5" cy="78.0" r="3.5" fill="#BA7517"/><circle cx="185.0" cy="89.2" r="3.5" fill="#BA7517"/><circle cx="247.5" cy="105.2" r="3.5" fill="#BA7517"/><circle cx="310.0" cy="135.6" r="3.5" fill="#BA7517"/><circle cx="372.5" cy="147.6" r="3.5" fill="#BA7517"/><circle cx="385.0" cy="158.0" r="3.5" fill="#BA7517"/><circle cx="422.5" cy="144.4" r="3.5" fill="#BA7517"/><circle cx="460.0" cy="136.4" r="3.5" fill="#BA7517"/><circle cx="497.5" cy="146.0" r="3.5" fill="#BA7517"/><circle cx="522.5" cy="151.6" r="3.5" fill="#BA7517"/><circle cx="547.5" cy="158.0" r="3.5" fill="#BA7517"/><circle cx="560.0" cy="160.4" r="3.5" fill="#BA7517"/><text x="568" y="164.4" font-size="12" font-weight="bold" fill="#BA7517" font-family="sans-serif">0.87</text>
+  <text x="300" y="16" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">台灣總生育率 1984–2024</text>
+  <text x="300" y="292" text-anchor="middle" font-size="11" fill="#B4B2A9" font-family="sans-serif">資料來源：內政部戶政司（2025）人口統計年刊</text>
+</svg>
+
+</figure>
+
+
 1984 年，台灣的生育率還有 2.06，勉強維持人口替換水準。短短四十年，整整跌去一半以上。
 
 在這段時間裡，台灣的平均薪資成長有限，但台北市的房價所得比已攀升至 2025 年第一季的 16.2 倍（全台為 10.24 倍）——也就是說，一個台北的受薪家庭不吃不喝要花 16 年，才能買到一間房。

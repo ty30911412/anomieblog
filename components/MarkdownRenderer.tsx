@@ -4,7 +4,30 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import rehypeSanitize from 'rehype-sanitize'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
+
+// 擴展 sanitize schema，允許 SVG 元素與屬性
+const sanitizeSchema = {
+  ...defaultSchema,
+  tagNames: [
+    ...(defaultSchema.tagNames ?? []),
+    'svg', 'g', 'rect', 'circle', 'line', 'path', 'text', 'tspan',
+    'polyline', 'polygon', 'defs', 'clipPath', 'use', 'title',
+  ],
+  attributes: {
+    ...defaultSchema.attributes,
+    svg: ['viewBox', 'width', 'height', 'xmlns', 'aria-label', 'role'],
+    g: ['transform', 'fill', 'stroke', 'opacity'],
+    rect: ['x', 'y', 'width', 'height', 'fill', 'stroke', 'rx', 'ry', 'opacity'],
+    circle: ['cx', 'cy', 'r', 'fill', 'stroke', 'opacity'],
+    line: ['x1', 'y1', 'x2', 'y2', 'stroke', 'strokeWidth', 'stroke-width', 'opacity', 'strokeDasharray', 'stroke-dasharray'],
+    path: ['d', 'fill', 'stroke', 'strokeWidth', 'stroke-width', 'opacity'],
+    text: ['x', 'y', 'fill', 'fontSize', 'font-size', 'fontFamily', 'font-family', 'textAnchor', 'text-anchor', 'dominantBaseline', 'dominant-baseline', 'fontWeight', 'font-weight', 'opacity'],
+    tspan: ['x', 'y', 'dx', 'dy', 'fill', 'fontSize', 'font-size'],
+    polyline: ['points', 'fill', 'stroke', 'strokeWidth', 'stroke-width'],
+    polygon: ['points', 'fill', 'stroke', 'strokeWidth', 'stroke-width'],
+  },
+}
 
 interface Props {
   content: string
@@ -25,7 +48,7 @@ const MarkdownRenderer: React.FC<Props> = ({ content }) => {
     <div className="prose prose-stone max-w-none text-ink-800 leading-relaxed">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+        rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
         components={{
           // 標題加上 id，讓 TOC anchor 能跳轉
           h1: ({ node, children, ...props }) => (

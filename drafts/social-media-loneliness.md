@@ -8,6 +8,46 @@
 
 ## 孤獨，是全球公衛危機
 
+<figure style="margin: 2rem 0">
+
+<svg viewBox="0 0 457 295" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="各世代孤獨指數比較，Z世代最高">
+  <title>各世代孤獨指數（Cigna 2018，滿分80分）</title>
+  <text x="228.5" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">各世代孤獨指數（滿分 80 分）</text>
+  <line x1="60" y1="215" x2="560" y2="215" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="31" y="219" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">30</text><line x1="60" y1="181" x2="560" y2="181" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="31" y="185" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">35</text><line x1="60" y1="147" x2="560" y2="147" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="31" y="151" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">40</text><line x1="60" y1="113" x2="560" y2="113" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="31" y="117" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">45</text><line x1="60" y1="79" x2="560" y2="79" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="31" y="83" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">50</text><line x1="60" y1="45" x2="560" y2="45" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="31" y="49" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">55</text>
+  <line x1="35" y1="215" x2="452" y2="215" stroke="#B4B2A9" stroke-width="1"/>
+  
+    <rect x="35" y="90.6" width="68" height="124.4" fill="#534AB7" rx="3" stroke="#CECBF6" stroke-width="0.5"/>
+    <text x="69" y="85.56000000000002" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">48.3</text>
+    <text x="69" y="229" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">Z 世代</text>
+    <text x="69" y="241" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">(1997–)</text>
+    <rect x="121" y="111.0" width="68" height="104.0" fill="#7F77DD" rx="3" stroke="#CECBF6" stroke-width="0.5"/>
+    <text x="155" y="105.96000000000002" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">45.3</text>
+    <text x="155" y="229" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">千禧世代</text>
+    <text x="155" y="241" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">(1981–96)</text>
+    <rect x="207" y="112.3" width="68" height="102.7" fill="#AFA9EC" rx="3" stroke="#CECBF6" stroke-width="0.5"/>
+    <text x="241" y="107.31999999999998" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">45.1</text>
+    <text x="241" y="229" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">X 世代</text>
+    <text x="241" y="241" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">(1965–80)</text>
+    <rect x="293" y="130.7" width="68" height="84.3" fill="#CECBF6" rx="3" stroke="#CECBF6" stroke-width="0.5"/>
+    <text x="327" y="125.68" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">42.4</text>
+    <text x="327" y="229" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">嬰兒潮</text>
+    <text x="327" y="241" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">(1946–64)</text>
+    <rect x="379" y="156.5" width="68" height="58.5" fill="#EEEDFE" rx="3" stroke="#CECBF6" stroke-width="0.5"/>
+    <text x="413" y="151.51999999999998" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">38.6</text>
+    <text x="413" y="229" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">最偉大</text>
+    <text x="413" y="241" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">世代</text>
+  <text x="228.5" y="285" text-anchor="middle" font-size="11" fill="#B4B2A9" font-family="sans-serif">資料來源：Cigna U.S. Loneliness Index（2018）</text>
+</svg>
+
+</figure>
+
+
 2023 年，世界衛生組織（WHO）正式將孤獨問題列為全球公共衛生優先議題，並成立了「社會連結委員會」。
 
 這不只是情緒上的不適。WHO 的研究顯示，全球約有 **六分之一的人**受孤獨與社會隔離影響；孤獨所帶來的健康風險，相當於每天抽 15 根菸。孤獨與社會隔離每年造成的過早死亡人數，估計超過 **87 萬人**。

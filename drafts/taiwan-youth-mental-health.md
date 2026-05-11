@@ -10,6 +10,52 @@
 
 ## 數字告訴我們的事
 
+<figure style="margin: 2rem 0">
+
+<svg viewBox="0 0 458 295" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="台灣國高中生心理健康統計 2025">
+  <title>台灣國高中生心理健康統計（2025）</title>
+  <text x="229" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">國高中生心理健康現況（2025）</text>
+  <line x1="60" y1="220" x2="560" y2="220" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="26" y="224" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">0%</text><line x1="60" y1="160" x2="560" y2="160" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="26" y="164" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">20%</text><line x1="60" y1="100" x2="560" y2="100" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="26" y="104" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">40%</text><line x1="60" y1="40" x2="560" y2="40" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="26" y="44" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">60%</text>
+  <line x1="30" y1="220" x2="448" y2="220" stroke="#B4B2A9" stroke-width="1"/>
+  
+    <rect x="30" y="109.0" width="58" height="111.0" fill="#D85A30" rx="3"/>
+    <text x="59" y="104" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">37%</text>
+    <text x="59" y="234" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">面臨情緒</text>
+    <text x="59" y="246" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">困擾</text>
+    <rect x="102" y="166.9" width="58" height="53.1" fill="#E24B4A" rx="3"/>
+    <text x="131" y="161.9" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">17.7%</text>
+    <text x="131" y="234" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">中重度</text>
+    <text x="131" y="246" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">情緒困擾</text>
+    <rect x="174" y="158.5" width="58" height="61.5" fill="#F09595" rx="3"/>
+    <text x="203" y="153.5" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">20.5%</text>
+    <text x="203" y="234" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">頻繁拒學</text>
+    <text x="203" y="246" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">念頭</text>
+    <rect x="246" y="76.3" width="58" height="143.7" fill="#5F5E5A" rx="3"/>
+    <text x="275" y="71.30000000000001" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">47.9%</text>
+    <text x="275" y="234" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">睡眠</text>
+    <text x="275" y="246" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">不足</text>
+    <rect x="318" y="80.5" width="58" height="139.5" fill="#FAC775" rx="3"/>
+    <text x="347" y="75.5" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">46.5%</text>
+    <text x="347" y="234" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">向AI</text>
+    <text x="347" y="246" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">求助</text>
+    <rect x="390" y="96.7" width="58" height="123.3" fill="#FAC775" rx="3"/>
+    <text x="419" y="91.69999999999999" text-anchor="middle" font-size="11" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">41.1%</text>
+    <text x="419" y="234" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">向輔導室</text>
+    <text x="419" y="246" text-anchor="middle" font-size="10" fill="#3C3C3A" font-family="sans-serif">求助</text>
+  <rect x="149" y="254" width="12" height="12" fill="#D85A30" rx="2"/>
+  <text x="165" y="264" font-size="11" fill="#5F5E5A" font-family="sans-serif">心理健康症狀</text>
+  <rect x="239" y="254" width="12" height="12" fill="#FAC775" rx="2"/>
+  <text x="255" y="264" font-size="11" fill="#5F5E5A" font-family="sans-serif">行為／求助</text>
+  <text x="229" y="285" text-anchor="middle" font-size="11" fill="#B4B2A9" font-family="sans-serif">資料來源：兒童福利聯盟（2025）台灣青少年心理健康調查報告</text>
+</svg>
+
+</figure>
+
+
 兒童福利聯盟於 2025 年發布的《台灣青少年心理健康調查報告》，訪問了全台 7,007 名國高中生，結果令人憂心：
 
 近 **37%** 的青少年正面臨程度不一的情緒困擾；其中 **17.7%** 達到中重度，意味著每六個坐在你面前的高中生，就有一個正承受超出正常範圍的心理壓力。

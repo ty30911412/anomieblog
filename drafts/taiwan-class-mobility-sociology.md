@@ -14,6 +14,41 @@ B 出生在台南的工廠社區，父親是作業員，母親做兼職，家裡
 
 ## 數字先說話
 
+<figure style="margin: 2rem 0">
+
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="各國最富20%與最貧20%家庭財富差距比較">
+  <title>各國家庭財富差距比較（最富20% ÷ 最貧20%）</title>
+  <text x="300" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">家庭財富差距（最富20% ÷ 最貧20%）</text>
+  <line x1="70" y1="40" x2="70" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="70" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">0</text><line x1="139.6969696969697" y1="40" x2="139.6969696969697" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="139.6969696969697" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">100</text><line x1="209.3939393939394" y1="40" x2="209.3939393939394" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="209.3939393939394" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">200</text><line x1="279.0909090909091" y1="40" x2="279.0909090909091" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="279.0909090909091" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">300</text><line x1="348.7878787878788" y1="40" x2="348.7878787878788" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="348.7878787878788" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">400</text><line x1="418.4848484848485" y1="40" x2="418.4848484848485" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="418.4848484848485" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">500</text><line x1="488.1818181818182" y1="40" x2="488.1818181818182" y2="230" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="488.1818181818182" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">600</text>
+    <rect x="70" y="40" width="437.3" height="26" fill="#D3D1C7" rx="3"/>
+    <text x="64" y="57" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">法國</text>
+    <text x="513.2787878787879" y="57" text-anchor="start" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">627.4 倍</text>
+    <rect x="70" y="80" width="97.6" height="26" fill="#B4B2A9" rx="3"/>
+    <text x="64" y="97" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">韓國</text>
+    <text x="173.64545454545453" y="97" text-anchor="start" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">140.1 倍</text>
+    <rect x="70" y="120" width="76.3" height="26" fill="#888780" rx="3"/>
+    <text x="64" y="137" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">英國</text>
+    <text x="152.3181818181818" y="137" text-anchor="start" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">109.5 倍</text>
+    <rect x="70" y="160" width="64.9" height="26" fill="#5F5E5A" rx="3"/>
+    <text x="64" y="177" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">澳洲</text>
+    <text x="140.88787878787878" y="177" text-anchor="start" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">93.1 倍</text>
+    <rect x="70" y="200" width="46.6" height="26" fill="#BA7517" rx="3"/>
+    <text x="64" y="217" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">台灣</text>
+    <text x="122.62727272727273" y="217" text-anchor="start" font-size="12" font-weight="bold" fill="#BA7517" font-family="sans-serif">66.9 倍</text>
+  <text x="300" y="260" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">財富倍數</text>
+  <text x="300" y="292" text-anchor="middle" font-size="11" fill="#B4B2A9" font-family="sans-serif">資料來源：主計總處 112 年國富統計報告；OECD Wealth Distribution Database</text>
+</svg>
+
+</figure>
+
+
 2024 年，台灣主計總處公布了一份睽違三十年的「國富統計」。數字相當觸目：最富裕的 20% 家庭，平均財富為 5,133 萬元；最貧困的 20% 家庭，平均財富僅有 77 萬元。
 
 兩者差距：**66.9 倍**。

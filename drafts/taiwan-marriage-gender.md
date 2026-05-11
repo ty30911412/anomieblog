@@ -14,6 +14,27 @@
 
 ## 女性離婚姻更遠——而且是主動選擇的
 
+<figure style="margin: 2rem 0">
+
+<svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="台灣25至44歲適婚族群未婚率趨勢1990–2020">
+  <title>台灣適婚族群（25–44歲）未婚率 1990–2020</title>
+  <text x="310" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">適婚族群（25–44歲）未婚率 1990–2020</text>
+  <line x1="60" y1="220" x2="560" y2="220" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="54" y="224" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">10%</text><line x1="60" y1="180" x2="560" y2="180" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="54" y="184" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">20%</text><line x1="60" y1="140" x2="560" y2="140" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="54" y="144" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">30%</text><line x1="60" y1="100" x2="560" y2="100" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="54" y="104" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">40%</text><line x1="60" y1="60" x2="560" y2="60" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+    <text x="54" y="64" text-anchor="end" font-size="11" fill="#5F5E5A" font-family="sans-serif">50%</text>
+  <line x1="60" y1="220" x2="545" y2="220" stroke="#B4B2A9" stroke-width="1"/>
+  <line x1="60" y1="30" x2="60" y2="220" stroke="#B4B2A9" stroke-width="1"/>
+  <text x="60" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">1990</text><text x="140" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">1995</text><text x="220" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2000</text><text x="300" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2005</text><text x="380" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2010</text><text x="460" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2015</text><text x="540" y="236" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">2020</text>
+  <text x="20" y="140" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif" transform="rotate(-90,20,140)">未婚率</text>
+  <polygon points="60.0,175.6 140.0,165.2 220.0,146.0 300.0,127.2 380.0,108.8 460.0,96.4 540.0,87.2 540,220 60,220" fill="#1D9E75" opacity="0.1"/><polyline points="60.0,175.6 140.0,165.2 220.0,146.0 300.0,127.2 380.0,108.8 460.0,96.4 540.0,87.2" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-linejoin="round"/><circle cx="60.0" cy="175.6" r="4" fill="#1D9E75"/><circle cx="140.0" cy="165.2" r="4" fill="#1D9E75"/><circle cx="220.0" cy="146.0" r="4" fill="#1D9E75"/><circle cx="300.0" cy="127.2" r="4" fill="#1D9E75"/><circle cx="380.0" cy="108.8" r="4" fill="#1D9E75"/><circle cx="460.0" cy="96.4" r="4" fill="#1D9E75"/><circle cx="540.0" cy="87.2" r="4" fill="#1D9E75"/><text x="548" y="91.19999999999999" font-size="12" font-weight="bold" fill="#1D9E75" font-family="sans-serif">43.2%</text>
+  <text x="300" y="292" text-anchor="middle" font-size="11" fill="#B4B2A9" font-family="sans-serif">資料來源：行政院主計總處人口及住宅普查；中央研究院家庭動態調查（2020）</text>
+</svg>
+
+</figure>
+
 在台灣，不婚的性別差異非常明顯。
 
 根據主計總處統計，在教育程度較高的族群中，女性未婚率高於男性：具專科以上學歷者，女性未婚率 **41.5%**，男性 **38.7%**。到了 55 至 59 歲的中年段，每 100 位女碩士中，仍有約 **21 人**未婚，而同齡男碩士未婚比例僅約 **6%**。
