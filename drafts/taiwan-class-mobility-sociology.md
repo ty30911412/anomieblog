@@ -15,21 +15,47 @@ B 出生在台南的工廠社區，父親是作業員，母親做兼職，家裡
 ## 數字先說話
 
 <figure style="margin: 2rem 0">
-<svg viewBox="0 0 520 195" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="台灣所得差距6.1倍與財富差距66.9倍對比">
-  <title>台灣：所得差距 vs 財富差距（最富20% ÷ 最貧20%）</title>
-  <text x="260" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">台灣：所得差距 vs 財富差距</text>
-  <text x="260" y="36" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">最富 20% ÷ 最貧 20%（五等分位比）</text>
-  <text x="83" y="76" text-anchor="end" font-size="12" fill="#5F5E5A" font-family="sans-serif">所得差距</text>
-  <rect x="88" y="56" width="34" height="30" fill="#6BAF87" rx="3"/>
-  <text x="127" y="76" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">6.1 倍</text>
-  <text x="83" y="126" text-anchor="end" font-size="12" fill="#5F5E5A" font-family="sans-serif">財富差距</text>
-  <rect x="88" y="106" width="380" height="30" fill="#BA7517" rx="3"/>
-  <text x="473" y="126" font-size="13" font-weight="bold" fill="#BA7517" font-family="sans-serif">66.9 倍</text>
-  <line x1="88" y1="56" x2="88" y2="136" stroke="#B4B2A9" stroke-width="1"/>
-  <text x="260" y="158" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">→ 財富差距是所得差距的 11 倍；財富吉尼係數 0.606（警戒線：0.4）</text>
-  <text x="260" y="182" text-anchor="middle" font-size="11" fill="#B4B2A9" font-family="sans-serif">資料來源：行政院主計總處 112 年國富統計報告（2024）</text>
+<svg viewBox="0 0 560 295" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="東亞各國財富吉尼係數比較2023">
+  <title>東亞各國財富吉尼係數比較（UBS/Credit Suisse GWR 2023）</title>
+  <text x="280" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#3C3C3A" font-family="sans-serif">東亞各國財富吉尼係數比較（2023）</text>
+  <text x="280" y="35" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">數值越高，財富越集中；X 軸範圍 55–90</text>
+  <line x1="198.6" y1="48" x2="198.6" y2="255" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="252.1" y1="48" x2="252.1" y2="255" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="305.7" y1="48" x2="305.7" y2="255" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="359.3" y1="48" x2="359.3" y2="255" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="412.9" y1="48" x2="412.9" y2="255" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="466.4" y1="48" x2="466.4" y2="255" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <line x1="145" y1="255" x2="520" y2="255" stroke="#B4B2A9" stroke-width="1"/>
+  <text x="145" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">55</text>
+  <text x="198.6" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">60</text>
+  <text x="252.1" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">65</text>
+  <text x="305.7" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">70</text>
+  <text x="359.3" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">75</text>
+  <text x="412.9" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">80</text>
+  <text x="466.4" y="270" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="sans-serif">85</text>
+  <text x="138" y="68" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">日本</text>
+  <rect x="145" y="52" width="107" height="24" fill="#CECBF6" rx="3"/>
+  <text x="257" y="69" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">65.0</text>
+  <text x="138" y="106" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">韓國</text>
+  <rect x="145" y="90" width="138" height="24" fill="#AFA9EC" rx="3"/>
+  <text x="288" y="107" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">67.9</text>
+  <text x="138" y="144" text-anchor="end" font-size="12" font-weight="bold" fill="#BA7517" font-family="sans-serif">台灣</text>
+  <rect x="145" y="128" width="158" height="24" fill="#BA7517" rx="3"/>
+  <text x="308" y="145" font-size="12" font-weight="bold" fill="#BA7517" font-family="sans-serif">69.8</text>
+  <text x="138" y="182" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">中國*</text>
+  <rect x="145" y="166" width="165" height="24" fill="#7F77DD" rx="3"/>
+  <text x="315" y="183" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">70.4</text>
+  <text x="138" y="220" text-anchor="end" font-size="12" fill="#3C3C3A" font-family="sans-serif">新加坡*</text>
+  <rect x="145" y="204" width="201" height="24" fill="#534AB7" rx="3"/>
+  <text x="351" y="221" font-size="12" font-weight="bold" fill="#5F5E5A" font-family="sans-serif">73.8</text>
+  <text x="138" y="248" text-anchor="end" font-size="11" fill="#B4B2A9" font-family="sans-serif">美國†</text>
+  <rect x="145" y="232" width="320" height="24" fill="#D3D1C7" rx="3"/>
+  <text x="470" y="249" font-size="12" font-weight="bold" fill="#B4B2A9" font-family="sans-serif">84.9</text>
+  <text x="280" y="283" text-anchor="middle" font-size="10" fill="#B4B2A9" font-family="sans-serif">資料來源：UBS/Credit Suisse GWR 2023　* 估計值　† 西方對照參考</text>
 </svg>
 </figure>
+
+以跨國標準化的財富吉尼係數來看，台灣（69.8）高於同為東亞發達經濟體的日本（65.0）與韓國（67.9），在東亞主要經濟體中屬偏高，僅低於新加坡。這裡採用 UBS/Credit Suisse 的跨國估算方法，因此台灣數值與主計總處家庭調查估算（0.606）因方法論不同而有差異，但方向一致：台灣的財富集中程度，值得正視。
 
 
 2024 年，台灣主計總處公布了一份睽違三十年的「國富統計」。數字相當觸目：最富裕的 20% 家庭，平均財富為 5,133 萬元；最貧困的 20% 家庭，平均財富僅有 77 萬元。
@@ -130,3 +156,4 @@ Bourdieu 的論點是：**這些資本可以被繼承、被轉換，但很難只
 - Bourdieu, P. (1986). The Forms of Capital. In J. G. Richardson (Ed.), *Handbook of Theory and Research for the Sociology of Education* (pp. 241–258). Greenwood.
 - 行政院主計總處（2024）。*112 年國富統計報告*。
 - 內政部不動產資訊平台（2025）。*房價負擔能力指標統計成果*。
+- UBS/Credit Suisse (2023). *Global Wealth Report 2023*. UBS Group AG.
